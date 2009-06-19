@@ -1,3 +1,10 @@
+ubiquity (1.12.12jolicloud1) robby; urgency=low
+
+  * Changed the pixmap to the jolicloud one (hard-coded)
+  * Get the upstream release codename if it exists
+
+ -- Tristan Groléat <tristan@jolicloud.org>  Fri, 19 Jun 2009 11:17:16 +0200
+
 ubiquity (1.12.12) jaunty; urgency=low
 
   * Set the window manager type hint to dialog for

@@ -298,7 +298,7 @@ class SegmentedBar(gtk.Widget):
         layout = None
         self.layout_height = 0
         self.layout_width = 0
-
+        
         for i in range(len(self.segments)):
             layout = self.create_adapt_layout(layout, False, True)
             title = self.segments[i].title
@@ -598,8 +598,9 @@ class SegmentedBarSlider(SegmentedBar):
         # matter if the min_size is set after the segments are added.
         if self.resize != -1 and len(self.segments) > self.resize + 1:
             sum = self.segments[self.resize].size + self.segments[self.resize + 1].size
-            self.segments[self.resize].set_size(self.max_size)
-            self.segments[self.resize + 1].set_size(sum - self.max_size)
+            midpoint = (self.max_size + self.min_size) / 2
+            self.segments[self.resize].set_size(midpoint)
+            self.segments[self.resize + 1].set_size(sum - midpoint)
             self.queue_draw()
 
     def motion_notify_event(self, widget, event):

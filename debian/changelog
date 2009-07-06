@@ -1,3 +1,9 @@
+ubiquity (1.12.12jolicloud3) robby; urgency=low
+
+  * Fixed partition size selection for "install next to" option
+
+ -- Romain Huet <romain@jolicloud.org>  Mon, 06 Jul 2009 15:23:07 +0200
+
 ubiquity (1.12.12jolicloud2) robby; urgency=low
 
   * Change the modification dates of the Release files

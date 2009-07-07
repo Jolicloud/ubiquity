@@ -1,0 +1,7 @@
+WARNING:
+
+Git doesn't save modification dates.
+Cache files in d-i/source/apt-setup/release-files should be older than the real files
+on the Ubuntu repositories, so that they are updated immediately.
+Else it will create GPG check errors when running apt-get upgrade.
+SO CHANGE THESE MODIFICATION DATES!

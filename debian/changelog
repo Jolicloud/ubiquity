@@ -1,3 +1,9 @@
+ubiquity (1.12.12jolicloud5) robby; urgency=low
+
+  * Fixed modification dates again again
+
+ -- Tristan Groléat <tristan@jolicloud.org>  Wed, 08 Jul 2009 17:20:16 +0200
+
 ubiquity (1.12.12jolicloud4) robby; urgency=low
 
   * Fixed modification dates again

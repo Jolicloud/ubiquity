@@ -1,3 +1,9 @@
+ubiquity (1.12.12jolicloud6) robby; urgency=low
+
+  * Set default partition format to ext4
+
+ -- Adam McDaniel <adam@jolicloud.org>  Mon, 24 Aug 2009 14:28:50 -0600
+
 ubiquity (1.12.12jolicloud5) robby; urgency=low
 
   * Fixed modification dates again again

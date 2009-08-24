@@ -382,7 +382,7 @@ Description: for internal use; can be preseeded
 
 Template: partman/default_filesystem
 Type: string
-Default: ext3
+Default: ext4
 Description: for internal use; can be preseeded
  Default filesystem used for new partitions
 

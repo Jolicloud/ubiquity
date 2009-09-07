@@ -34,6 +34,7 @@ import socket
 import fcntl
 import traceback
 import syslog
+import signal
 import gzip
 import debconf
 import warnings
@@ -141,15 +142,32 @@ class DebconfInstallProgress(InstallProgress):
         self.db.subst(self.info, 'DESCRIPTION', status)
         self.db.progress('INFO', self.info)
 
+    def alarm_handler(*args):
+        raise Exception("timeout")
+
     def updateInterface(self):
         # TODO cjwatson 2006-02-28: InstallProgress.updateInterface doesn't
         # give us a handy way to spot when percentages/statuses change and
         # aren't pmerror/pmconffile, so we have to reimplement it here.
         if self.statusfd is None:
             return False
+        signal.signal(signal.SIGALRM, alarm_handler)
         try:
             while not self.read.endswith("\n"):
-                r = os.read(self.statusfd.fileno(),1)
+                # The self.statusfd handle from apt.progress may stall giving no
+                # data. Add a timeout to atleast push the process along. This is
+                # required when installing ubiquity with wubi without network
+                # access. Why?.. I have no idea. 8 hours of debugging and this
+                # was our solution...
+                try:
+                    signal.alarm(30)
+                    r = os.read(self.statusfd.fileno(),1)
+                    syslog.syslog(syslog.LOG_ERR,"r: %s" % r)
+                    syslog.syslog(syslog.LOG_ERR,"3")
+                except Exception, e:
+                    self.read += "\n"
+                    if not str(e) == 'timeout':
+                        raise
                 if not r:
                     return False
                 self.read += r

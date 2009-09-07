@@ -1,4 +1,12 @@
-ubiquity (1.12.12jolicloud6) robby; urgency=low
+ubiquity (1.12.12jolicloud7) robby; urgency=low
+
+  * Add timeout in apt.process read during installation to gracefully
+    sidestep stalls during wubi installations when network access isn't
+    available.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Mon, 07 Sep 2009 21:00:28 +0200
+
+ubiquity (1.12.12jolicloud6) UNRELEASED; urgency=low
 
   * Set default partition format to ext4
 

@@ -1,3 +1,10 @@
+ubiquity (1.12.12jolicloud8) robby; urgency=low
+
+  * Applied rule to pre-date Release files to prevent APT failures on
+    LiveUSB
+
+ -- Adam McDaniel <adam@jolicloud.org>  Fri, 11 Sep 2009 02:41:34 -0600
+
 ubiquity (1.12.12jolicloud7) robby; urgency=low
 
   * Add timeout in apt.process read during installation to gracefully

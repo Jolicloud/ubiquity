@@ -1,3 +1,9 @@
+ubiquity (2.0.6jolicloud1) robby; urgency=low
+
+  * Merged upstream 2.0.6 into jolicloud branch
+
+ -- Adam McDaniel <adam@jolicloud.org>  Thu, 19 Nov 2009 09:49:22 -0700
+
 ubiquity (2.0.6) karmic; urgency=low
 
   * Automatic update of included source packages: partman-basicmethods

@@ -1,3 +1,14 @@
+ubiquity (2.0.6jolicloud2) robby; urgency=low
+
+  [ Alex Launi ]
+  * UI changes to installer slideshow gtkbuilder files
+
+  [ Adam McDaniel ]
+  * Forced building on jolicloud's debhelper; removes requirement of
+    upstart-job
+
+ -- Adam McDaniel <adam@jolicloud.org>  Thu, 19 Nov 2009 14:24:00 -0700
+
 ubiquity (2.0.6jolicloud1) robby; urgency=low
 
   * Merged upstream 2.0.6 into jolicloud branch

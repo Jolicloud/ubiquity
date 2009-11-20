@@ -1,3 +1,10 @@
+ubiquity (2.0.6jolicloud4) robby; urgency=low
+
+  * Revert "Applied work-around to debian/ubiquity.templates"
+  * Changed debian/po from a text-file to symlink
+
+ -- Adam McDaniel <adam@jolicloud.org>  Thu, 19 Nov 2009 21:44:07 -0700
+
 ubiquity (2.0.6jolicloud3) robby; urgency=low
 
   * Applied work-around to debian/ubiquity.templates

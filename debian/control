@@ -10,8 +10,8 @@ Vcs-Bzr: http://bazaar.launchpad.net/~ubuntu-installer/ubiquity/trunk
 
 Package: ubiquity
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, debconf (>= 1.4.72ubuntu5), ubiquity-frontend-${mangled-version}, ubiquity-artwork-${mangled-version}, laptop-detect, lsb-release, ubiquity-casper, python-apt (>= 0.6.16.2ubuntu4), ${console-setup-depends}, iso-codes, passwd, adduser, os-prober, rdate, ntfsprogs [any-alpha any-amd64 any-i386 any-ia64 any-lpia], ecryptfs-utils, cryptsetup, python-pyicu, reiserfsprogs, language-selector-common (>= 0.4.16)
-Recommends: grub-pc [any-amd64 any-i386 any-lpia] | grub [any-amd64 any-i386 any-lpia], flash-kernel [armel], yaboot [powerpc], hfsutils [powerpc], silo [sparc], dmraid
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, debconf (>= 1.4.72ubuntu5), ubiquity-frontend-${mangled-version}, ubiquity-artwork-${mangled-version}, laptop-detect, lsb-release, ubiquity-casper, python-apt (>= 0.6.16.2ubuntu4), ${console-setup-depends}, iso-codes, passwd, adduser, os-prober, rdate, ntfsprogs [any-alpha any-amd64 any-i386 any-ia64 any-lpia], ecryptfs-utils, cryptsetup, python-pyicu, reiserfsprogs, language-selector-common (>= 0.4.16), python-webkit
+Recommends: grub-pc [any-amd64 any-i386 any-lpia] | grub [any-amd64 any-i386 any-lpia], flash-kernel [armel], yaboot [powerpc], hfsutils [powerpc], silo [sparc], dmraid, python-webkit, ubiquity-slideshow
 Conflicts: ubuntu-express, espresso, espresso-utils, espresso-locale, espresso-keyboard-setup, espresso-kbd-chooser, espresso-timezone, user-setup (<< 0.05ubuntu6), partman, espresso-grub, espresso-yaboot
 Replaces: ubuntu-express, espresso, espresso-utils, espresso-locale, espresso-keyboard-setup, espresso-kbd-chooser, espresso-timezone, user-setup (<< 0.05ubuntu6), partman, espresso-grub, espresso-yaboot, ubiquity-frontend-gtk (<< 0.99.82)
 XB-Python-Version: ${python:Versions}

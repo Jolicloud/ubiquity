@@ -173,6 +173,10 @@ class Wizard(BaseFrontend):
         self.history = []
         self.builder = gtk.Builder()
 
+        # FIXME: Write a proper program to detect a netbook hardware.
+        # For now, just use laptop-detect, this will assume all laptops are
+        # actually netbooks ;)
+        self.netbook = execute("laptop-detect")
         self.laptop = execute("laptop-detect")
 
         # set default language
@@ -520,7 +524,9 @@ class Wizard(BaseFrontend):
             self.username.set_editable(False)
             self.username.set_sensitive(False)
             self.username_edited = True
-            if self.laptop:
+            if self.netbook:
+                self.hostname.set_text('oem-netbook')
+            elif self.laptop:
                 self.hostname.set_text('oem-laptop')
             else:
                 self.hostname.set_text('oem-desktop')
@@ -1068,7 +1074,9 @@ class Wizard(BaseFrontend):
             self.username.handler_unblock(self.username_changed_id)
         elif (widget is not None and widget.get_name() == 'username' and
               not self.hostname_edited):
-            if self.laptop:
+            if self.netbook:
+                hostname_suffix = '-netbook'
+            elif self.laptop:
                 hostname_suffix = '-laptop'
             else:
                 hostname_suffix = '-desktop'

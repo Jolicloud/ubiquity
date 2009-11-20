@@ -1,3 +1,11 @@
+ubiquity (2.0.6jolicloud5) robby; urgency=low
+
+  * Rebuild to depend on libparted1.8-12
+  * Use the suffix "-netbook" for the machine's name, if netbook hardware
+  * Added recommendation for python-webkit, ubiquity-slideshow
+
+ -- Adam McDaniel <adam@jolicloud.org>  Thu, 19 Nov 2009 23:42:12 -0700
+
 ubiquity (2.0.6jolicloud4) robby; urgency=low
 
   * Revert "Applied work-around to debian/ubiquity.templates"

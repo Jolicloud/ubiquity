@@ -28,7 +28,6 @@ _Description: Specify partitions manually (advanced)
 
 Template: ubiquity/text/live_installer
 Type: text
-# This is used as a window title.
 _Description: Install
 
 Template: ubiquity/text/oem_config_title
@@ -220,7 +219,6 @@ _Description: Prepare partitions
 
 Template: ubiquity/text/part_format_warning
 Type: text
-# SYSTEMS is a comma-separated list of operating systems present on the disk.
 _Description: This will delete ${SYSTEMS} and install ${RELEASE}.
 
 Template: ubiquity/text/ready_heading_label
@@ -241,8 +239,6 @@ _Description: Advanced...
 
 Template: ubiquity/text/install_button
 Type: text
-# This is used as a button label, and should be translated as an action.
-# Omit the [ ... ] from the translation.
 _Description: Install[ action ]
 
 Template: ubiquity/text/step_label
@@ -293,81 +289,62 @@ _Description:
 
 Template: ubiquity/text/partition_layout_before
 Type: text
-# Displayed next to a graphical bar depicting the state of the disk before
-# automatic partitioning.
 _Description: Before:
 
 Template: ubiquity/text/partition_layout_after
 Type: text
-# Displayed next to a graphical bar depicting the state of the disk after
-# automatic partitioning.
 _Description: After:
 
 Template: ubiquity/text/partition_button_new_label
 Type: text
-# An action, displayed on a button or as a menu item.
 _Description: New Partition Table...
 
 Template: ubiquity/text/partition_button_new
 Type: text
-# An action, displayed on a button or as a menu item.
 _Description: Add...
 
 Template: ubiquity/text/partition_button_edit
 Type: text
-# An action, displayed on a button or as a menu item.
 _Description: Change...
 
 Template: ubiquity/text/partition_button_delete
 Type: text
-# An action, displayed on a button or as a menu item.
 _Description: Delete
 
 Template: ubiquity/text/partition_button_undo
 Type: text
-# An action, displayed on a button or as a menu item.
 _Description: Revert
 
 Template: ubiquity/text/partition_column_device
 Type: text
-# A column heading in the partitioner.
 _Description: Device
 
 Template: ubiquity/text/partition_column_type
 Type: text
-# A column heading in the partitioner. Indicates how the partition is to be
-# used (ext2, swap, etc.).
 _Description: Type
 
 Template: ubiquity/text/partition_column_mountpoint
 Type: text
-# A column heading in the partitioner.
 _Description: Mount point
 
 Template: ubiquity/text/partition_column_format
 Type: text
-# A column heading in the partitioner.
 _Description: Format?
 
 Template: ubiquity/text/partition_column_size
 Type: text
-# A column heading in the partitioner.
 _Description: Size
 
 Template: ubiquity/text/partition_column_used
 Type: text
-# A column heading in the partitioner. Indicates how much of the space on
-# this partition is used by data.
 _Description: Used
 
 Template: ubiquity/text/partition_free_space
 Type: text
-# Indicates unpartitioned free space on a disk.
 _Description: free space
 
 Template: ubiquity/text/partition_used_unknown
 Type: text
-# Indicates that we do not know how much space is used on this partition.
 _Description: unknown
 
 Template: ubiquity/text/partition_create_dialog
@@ -447,12 +424,10 @@ _Description:
 
 Template: ubiquity/text/go_back
 Type: text
-# Translators, this text will appear on a button, so KEEP IT SHORT
 _Description: Go Back
 
 Template: ubiquity/text/continue
 Type: text
-# Translators, this text will appear on a button, so KEEP IT SHORT
 _Description: Continue
 
 Template: ubiquity/finished_restart_only
@@ -463,7 +438,6 @@ _Description:
 
 Template: ubiquity/summary
 Type: note
-#flag:translate!:3
 _Description: Ready to install
   Language: ${LANGUAGE}
   Keyboard layout: ${KEYMAP}
@@ -509,7 +483,6 @@ _Description: Almost finished copying files...
 
 Template: ubiquity/install/copying_error/no_space
 Type: error
-#flag:translate!:3
 _Description: Installation Failed
  The installer encountered an error copying files to the hard disk:
  .
@@ -521,7 +494,6 @@ _Description: Installation Failed
 
 Template: ubiquity/install/copying_error/cd_fault
 Type: error
-#flag:translate!:3
 _Description: Installation Failed
  The installer encountered an error copying files to the hard disk:
  .
@@ -533,7 +505,6 @@ _Description: Installation Failed
 
 Template: ubiquity/install/copying_error/hd_fault
 Type: error
-#flag:translate!:3
 _Description: Installation Failed
  The installer encountered an error copying files to the hard disk:
  .
@@ -545,10 +516,6 @@ _Description: Installation Failed
 
 Template: ubiquity/install/copying_error/cd_hd_fault
 Type: error
-#flag:translate!:3
-#flag:comment:4
-# This is used when we don't know whether the CD/DVD or the hard disk is at
-# fault.
 _Description: Installation Failed
  The installer encountered an error copying files to the hard disk:
  .
@@ -563,10 +530,6 @@ _Description: Installation Failed
 Template: ubiquity/install/copying_error/md5
 Type: select
 Choices: abort, retry, skip
-#flag:translate!:3
-#flag:comment:4
-# This is used when there was an md5 mismatch during copying, meaning that
-# the source file and destination file are not equal.
 _Description: Installation Failed
  The following file did not match its source copy on the CD/DVD:
  .
@@ -656,24 +619,20 @@ _Description: Downloading package lists (${TIME} remaining)...
 
 Template: ubiquity/install/apt_info
 Type: text
-# Not translated; apt emits translated descriptions for us already.
 Description: ${DESCRIPTION}
 
 Template: ubiquity/install/apt_error_install
 Type: error
-#flag:translate!:2
 _Description: Error installing ${PACKAGE}
  ${MESSAGE}
 
 Template: ubiquity/install/apt_error_remove
 Type: error
-#flag:translate!:2
 _Description: Error removing ${PACKAGE}
  ${MESSAGE}
 
 Template: ubiquity/install/broken_install
 Type: error
-#flag:translate!:3,5
 _Description: Error while installing packages
  An error occurred while installing packages:
  .
@@ -693,7 +652,6 @@ _Description: Error while installing packages
 
 Template: ubiquity/install/broken_remove
 Type: error
-#flag:translate!:3,5
 _Description: Error while removing packages
  An error occurred while removing packages:
  .
@@ -776,7 +734,6 @@ Description: for internal use; prevent ubiquity from unmounting partitions befor
 Template: ubiquity/partman-failed-unmount
 Type: boolean
 Default: true
-#flag:translate!:3
 _Description: Failed to unmount partitions
  The installer needs to commit changes to partition tables, but cannot do so
  because partitions on the following mount points could not be unmounted:
@@ -811,7 +768,6 @@ Description: for internal use; specify a command to be run on unrecoverable inst
 
 Template: ubiquity/partition-too-small
 Type: boolean
-#flag:translate!:3
 _Description: Do you want to return to the partitioner?
  Some of the partitions you created are too small.  Please make the following
  partitions at least this large (in bytes):

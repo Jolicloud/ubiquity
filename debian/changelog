@@ -1,3 +1,9 @@
+ubiquity (2.0.6jolicloud3) robby; urgency=low
+
+  * Applied work-around to debian/ubiquity.templates
+
+ -- Adam McDaniel <adam@jolicloud.org>  Thu, 19 Nov 2009 19:37:03 -0700
+
 ubiquity (2.0.6jolicloud2) robby; urgency=low
 
   [ Alex Launi ]

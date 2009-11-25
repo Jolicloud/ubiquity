@@ -291,12 +291,31 @@
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">center-always</property>
+    <property name="decorated">False</property>
     <property name="deletable">False</property>
     <signal name="realize" handler="set_window_hints"/>
     <child>
       <widget class="GtkVBox" id="vbox35">
         <property name="visible">True</property>
         <property name="spacing">6</property>
+        <child>
+            <widget class="GtkFrame" id="slideshow_frame">
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">in</property>
+                <child>
+                    <placeholder/>
+                </child>
+                <child>
+                    <placeholder/>
+                    <packing>
+                        <property name="type">label_item</property>
+                    </packing>
+                </child>
+            </widget>
+            <packing>
+                <property name="position">0</property>
+            </packing>
+        </child>
         <child>
           <widget class="GtkLabel" id="progress_title">
             <property name="visible">True</property>
@@ -310,7 +329,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="padding">6</property>
-            <property name="position">0</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -322,12 +341,12 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
           <widget class="GtkHBox" id="hbox37">
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <property name="spacing">6</property>
             <child>
               <widget class="GtkLabel" id="progress_info">
@@ -362,7 +381,7 @@
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </widget>

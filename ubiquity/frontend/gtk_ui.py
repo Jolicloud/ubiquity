@@ -895,6 +895,37 @@ class Wizard(BaseFrontend):
 
         self.current_page = None
 
+        # slideshow
+        lang = self.locale.split('_')[0]
+        slides = '/usr/share/ubiquity-slideshow/slides/index.html'
+        s = self.live_installer.get_screen()
+        sh = s.get_height()
+        sw = s.get_width()
+        fail = None
+        if os.path.exists(slides):
+            slides = 'file://%s#locale=%s' % (slides,lang)
+            if sh >= 600 and sw >= 800:
+                ltr = i18n.get_string('default-ltr', lang, 'ubiquity/imported')
+                if ltr == 'default:RTL':
+                    slides += '#rtl'
+                try:
+                    import webkit
+                    webview = webkit.WebView()
+                    webview.open(slides)
+                    self.slideshow_frame.add(webview)
+                    webview.set_size_request(700,420)
+                    webview.connect('new-window-policy-decision-requested',
+                            self.on_slideshow_link_clicked)
+                    self.slideshow_frame.show_all()
+                except ImportError:
+                    fail = 'WebKit not present'
+            else:
+                fail = 'Display too small (%sx%s).' % (sw, sh)
+        else:
+            fail = 'Slides not found for %s.' % lang
+        if fail:
+            syslog.syslog('Not displaying the slideshow: %s' % fail)
+
         self.debconf_progress_start(
             0, 100, self.get_string('ubiquity/install/title'))
         self.debconf_progress_region(0, 15)
@@ -2681,6 +2712,7 @@ class Wizard(BaseFrontend):
 
         if self.installing and not self.installing_no_return:
             # Go back to the partitioner and try again.
+            self.slideshow_frame.hide()
             self.live_installer.show()
             # FIXME: ugh, can't hardcode this.
             self.pagesindex = 3

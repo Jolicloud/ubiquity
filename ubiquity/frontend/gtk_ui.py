@@ -905,9 +905,6 @@ class Wizard(BaseFrontend):
         if os.path.exists(slides):
             slides = 'file://%s#locale=%s' % (slides,lang)
             if sh >= 600 and sw >= 800:
-                ltr = i18n.get_string('default-ltr', lang, 'ubiquity/imported')
-                if ltr == 'default:RTL':
-                    slides += '#rtl'
                 try:
                     import webkit
                     webview = webkit.WebView()

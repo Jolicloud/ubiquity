@@ -47,6 +47,7 @@ import pygtk
 pygtk.require('2.0')
 import pango
 import gobject
+gobject.threads_init()
 import gtk.glade
 
 import debconf

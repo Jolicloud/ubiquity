@@ -1372,6 +1372,8 @@ class Wizard(BaseFrontend):
             progress_title = ""
         if self.progress_position.depth() == 0:
             self.debconf_progress_window.set_title(progress_title)
+        else:
+            progress_title = self.debconf_progress_window.get_title()
 
         self.progress_position.start(progress_min, progress_max,
                                      progress_title)
@@ -1388,6 +1390,12 @@ class Wizard(BaseFrontend):
             return False
         self.progress_position.set(progress_val)
         fraction = self.progress_position.fraction()
+        if fraction > 1:
+            syslog.syslog(syslog.LOG_ERR,
+                    "Fraction > 1")
+            for line in traceback.format_stack():
+                syslog.syslog(syslog.LOG_ERR, line)
+            fraction = 1
         self.progress_bar.set_fraction(fraction)
         self.progress_bar.set_text('%s%%' % int(fraction * 100))
         return True
@@ -1397,6 +1405,12 @@ class Wizard(BaseFrontend):
             return False
         self.progress_position.step(progress_inc)
         fraction = self.progress_position.fraction()
+        if fraction > 1:
+            syslog.syslog(syslog.LOG_ERR,
+                    "Fraction > 1")
+            for line in traceback.format_stack():
+                syslog.syslog(syslog.LOG_ERR, line)
+            fraction = 1
         self.progress_bar.set_fraction(fraction)
         self.progress_bar.set_text('%s%%' % int(fraction * 100))
         return True

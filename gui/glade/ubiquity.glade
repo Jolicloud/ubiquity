@@ -286,6 +286,7 @@
     </child>
   </widget>
   <widget class="GtkWindow" id="debconf_progress_window">
+    <property name="width_request">640</property>
     <property name="title">Progress bar title</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>

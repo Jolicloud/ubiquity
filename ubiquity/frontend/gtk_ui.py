@@ -1372,7 +1372,8 @@ class Wizard(BaseFrontend):
             progress_title = ""
         if self.progress_position.depth() == 0:
             self.debconf_progress_window.set_title(progress_title)
-        else:
+        elif progress_title != self.get_string('ubiquity/install/title') && \
+                progress_title != self.get_string('ubiquity/install/checking'):
             progress_title = self.debconf_progress_window.get_title()
 
         self.progress_position.start(progress_min, progress_max,

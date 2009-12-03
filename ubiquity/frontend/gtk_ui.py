@@ -131,6 +131,7 @@ class Wizard(BaseFrontend):
         sys.excepthook = self.excepthook
 
         # declare attributes
+        self.slideshow_initialized=False
         self.all_widgets = set()
         self.gconf_previous = {}
         self.thunar_previous = {}
@@ -368,6 +369,8 @@ class Wizard(BaseFrontend):
             got_intro = False
             self.debconf_progress_start(0, pageslen,
                 self.get_string('ubiquity/install/title'))
+            # slideshow
+            self.initialize_slideshow()
             self.refresh()
 
         # Start the interface
@@ -889,14 +892,10 @@ class Wizard(BaseFrontend):
 
     # Methods
 
-    def progress_loop(self):
-        """prepare, copy and config the system in the core install process."""
-
-        syslog.syslog('progress_loop()')
-
-        self.current_page = None
-
-        # slideshow
+    def initialize_slideshow(self):
+        if self.slideshow_initialized:
+            return
+        self.slideshow_initialized=True
         lang = self.locale.split('_')[0]
         slides = '/usr/share/ubiquity-slideshow/slides/index.html'
         s = self.live_installer.get_screen()
@@ -921,6 +920,16 @@ class Wizard(BaseFrontend):
             fail = 'Slides not found for %s.' % lang
         if fail:
             syslog.syslog('Not displaying the slideshow: %s' % fail)
+
+
+    def progress_loop(self):
+        """prepare, copy and config the system in the core install process."""
+
+        syslog.syslog('progress_loop()')
+
+        self.current_page = None
+
+        self.initialize_slideshow()
 
         self.debconf_progress_start(
             0, 100, self.get_string('ubiquity/install/title'))

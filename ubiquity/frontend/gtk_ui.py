@@ -367,10 +367,14 @@ class Wizard(BaseFrontend):
 
         if 'UBIQUITY_AUTOMATIC' in os.environ:
             got_intro = False
-            self.debconf_progress_start(0, pageslen,
-                self.get_string('ubiquity/install/title'))
             # slideshow
             self.initialize_slideshow()
+            try:
+                self.debconf_progress_window.modify_bg(gtk.STATE_NORMAL,gtk.gdk.color_parse("#2E303B"))
+            except:
+                pass
+            self.debconf_progress_start(0, pageslen,
+                self.get_string('ubiquity/install/title'))
             self.refresh()
 
         # Start the interface

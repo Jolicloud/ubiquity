@@ -369,10 +369,9 @@ class Wizard(BaseFrontend):
             got_intro = False
             # slideshow
             self.initialize_slideshow()
-            try:
+            if self.distro == "jolicloud":
                 self.debconf_progress_window.modify_bg(gtk.STATE_NORMAL,gtk.gdk.color_parse("#2E303B"))
-            except:
-                pass
+                self.progress_title.modify_fg(gtk.STATE_NORMAL,gtk.gdk.color_parse("white"))
             self.debconf_progress_start(0, pageslen,
                 self.get_string('ubiquity/install/title'))
             self.refresh()

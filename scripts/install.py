@@ -1577,7 +1577,7 @@ exit 0"""
         except debconf.DebconfError:
             domain = ''
         if hostname == '':
-            hostname = 'ubuntu'
+            hostname = 'jolicloud'
 
         fp = open(os.path.join(self.target, 'etc/hostname'), 'w')
         print >>fp, hostname

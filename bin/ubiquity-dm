@@ -182,7 +182,9 @@ class DM:
                 (pixmap, mask) = scaled.render_pixmap_and_mask(0)
                 root.set_back_pixmap(pixmap, False)
             else:
-                root.set_background(gtk.gdk.color_parse("#333642"))
+                subprocess.Popen(['xsetroot', '-solid', '#333642'],
+                    stdin=null, stdout=logfile, stderr=logfile,
+                    **maybe_drop_privileges)
             root.clear()
             gtk.gdk.flush()
             fp.close()

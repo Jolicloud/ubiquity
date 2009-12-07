@@ -173,16 +173,18 @@ class DM:
             # Don't show the background image in v1 accessibility profile. It
             # is not shown in the GNOME desktop after all.
             fp = open('/proc/cmdline', 'r')
+            import gtk
+            root = gtk.gdk.get_default_root_window()
             if os.access(background, os.R_OK) and not 'access=v1' in fp.readline():
-                import gtk
                 pixbuf = gtk.gdk.pixbuf_new_from_file(background)
-                root = gtk.gdk.get_default_root_window()
                 (root_width, root_height) = root.get_size()
                 scaled = pixbuf.scale_simple(root_width, root_height, gtk.gdk.INTERP_BILINEAR)
                 (pixmap, mask) = scaled.render_pixmap_and_mask(0)
                 root.set_back_pixmap(pixmap, False)
-                root.clear()
-                gtk.gdk.flush()
+            else:
+                root.set_background(gtk.gdk.color_parse("#333642"))
+            root.clear()
+            gtk.gdk.flush()
             fp.close()
 
         if self.frontend in ('gtk_ui', 'mythbuntu_ui'):

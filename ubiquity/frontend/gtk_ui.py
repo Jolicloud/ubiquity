@@ -370,8 +370,10 @@ class Wizard(BaseFrontend):
             # slideshow
             self.initialize_slideshow()
             if self.distro == "jolicloud":
-                self.debconf_progress_window.modify_bg(gtk.STATE_NORMAL,gtk.gdk.color_parse("#2E303B"))
+                self.debconf_progress_window.modify_bg(gtk.STATE_NORMAL,gtk.gdk.color_parse("#333642"))
                 self.progress_title.modify_fg(gtk.STATE_NORMAL,gtk.gdk.color_parse("white"))
+            else:
+                syslog.syslog('distro: %s' % self.distro)
             self.debconf_progress_start(0, pageslen,
                 self.get_string('ubiquity/install/title'))
             self.refresh()

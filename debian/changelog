@@ -1,3 +1,33 @@
+ubiquity (1.12.12jolicloud9) robby; urgency=low
+
+  * Support ubiquity-slideshow
+  * Remove right-to-left language support in the slideshow
+  * initialize threads at start of gtk frontend for webkit
+  * remove call to non-implemented hook to support links followed by the
+    user
+  * Cosmetic changes in the slideshow window
+  * Remove more interim progress messages
+  * Set installation window min width
+  * Allow verification and installing window titles
+  * Change requested width to default width
+  * fix typo: python "and" is "and" not "&&"
+  * better window size request
+  * Fix source encoding issue
+  * always display installing instead of checking then installing
+  * use gtk.Alignment instead of gtk.Frame for slideshow_frame to remove
+    borders
+  * launch slideshow earlier
+  * set correct bg color; try inializing the window before showing it
+  * modify progress title foreground color, apply only to jolicloud
+  * update dependencies
+  * pycscope output
+  * set default hostname to jolicloud
+  * set ubiquity root & window to the same gray
+  * use xsetroot to set the screen bg
+  * fix UI when launched from live
+
+ -- Benjamin Ryzman <benjamin@jolicloud.org>  Tue, 08 Dec 2009 16:30:26 +0100
+
 ubiquity (1.12.12jolicloud8) robby; urgency=low
 
   * Applied rule to pre-date Release files to prevent APT failures on

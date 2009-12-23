@@ -160,12 +160,13 @@ class TimezoneMap(gtk.Widget):
         # fudge factor for rest of timezone page + panels + a bit for luck;
         # since the current background image is 409 pixels high, 1024+768
         # screens and better should end up with a full-sized background
-        if screen_height > self.orig_background.get_height() + 300:
-            width = self.orig_background.get_width()
-            height = self.orig_background.get_height()
-        else:
-            width = self.orig_background.get_width() / 2
-            height = self.orig_background.get_height() / 2
+        width = self.orig_background.get_width()
+        height = self.orig_background.get_height()
+        margin = 260
+        if height > screen_height - margin:
+            ratio = float(width)/height
+            height = screen_height - margin
+            width = int(ratio * height)
         requisition.width = width
         requisition.height = height
         gtk.Widget.do_size_request(self, requisition)

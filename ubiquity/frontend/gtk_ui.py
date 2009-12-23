@@ -368,6 +368,9 @@ class Wizard(BaseFrontend):
         if self.distro == "jolicloud":
             self.debconf_progress_window.modify_bg(gtk.STATE_NORMAL,gtk.gdk.color_parse("#333642"))
             self.progress_title.modify_fg(gtk.STATE_NORMAL,gtk.gdk.color_parse("white"))
+            self.login_pass.hide()
+            self.login_encrypt.hide()
+            self.login_auto.hide()
         else:
             syslog.syslog('distro: %s' % self.distro)
         if 'UBIQUITY_AUTOMATIC' in os.environ:

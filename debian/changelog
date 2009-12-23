@@ -1,3 +1,10 @@
+ubiquity (1.12.12jolicloud10) robby; urgency=low
+
+  * Do not display autologin option
+  * Show bigger map when screen is not large enough
+
+ -- Benjamin Ryzman <benjamin@jolicloud.org>  Wed, 23 Dec 2009 11:58:30 +0100
+
 ubiquity (1.12.12jolicloud9) robby; urgency=low
 
   * Support ubiquity-slideshow

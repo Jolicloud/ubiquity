@@ -1,3 +1,10 @@
+ubiquity (1.12.12jolicloud11) robby; urgency=low
+
+  * Updated the list of timezones from tzsetup
+  * Renamed the distro to Jolicloud in translation files & Glade
+
+ -- Adam McDaniel <adam@jolicloud.org>  Fri, 19 Mar 2010 11:47:40 -0600
+
 ubiquity (1.12.12jolicloud10) robby; urgency=low
 
   * Do not display autologin option

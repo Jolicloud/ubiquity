@@ -124,6 +124,8 @@ class Wizard(BaseFrontend):
                 # labels are unfocusable here.
                 if isinstance(widget, gtk.Label):
                     widget.set_property('can-focus', False)
+		elif isinstance(widget, gtk.Button):
+                    widget.set_property('use-underline', True)
 
         BaseFrontend.__init__(self, distro)
 

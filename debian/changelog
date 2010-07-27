@@ -1,3 +1,10 @@
+ubiquity (1.12.12jolicloud12) robby; urgency=low
+
+  * Force the system hostname to be 'jolicloud'
+  * Fixed underlines on quit/back/forward buttons
+
+ -- Adam McDaniel <adam@jolicloud.org>  Mon, 26 Jul 2010 19:57:41 -0600
+
 ubiquity (1.12.12jolicloud11) robby; urgency=low
 
   * Updated the list of timezones from tzsetup

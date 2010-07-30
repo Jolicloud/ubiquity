@@ -1,3 +1,14 @@
+ubiquity (1.12.12jolicloud13) robby; urgency=low
+
+  [ Alex Launi ]
+  * An ultra-hack of a fix putting the mnemonics back onto the buttons
+
+  [ Adam McDaniel ]
+  * Revert "Fixed underlines on quit/back/forward buttons"
+  * Revert "Force the system hostname to be 'jolicloud'"
+
+ -- Adam McDaniel <adam@jolicloud.org>  Fri, 30 Jul 2010 00:41:22 -0600
+
 ubiquity (1.12.12jolicloud12) robby; urgency=low
 
   * Force the system hostname to be 'jolicloud'

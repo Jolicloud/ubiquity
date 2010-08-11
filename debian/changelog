@@ -1,3 +1,10 @@
+ubiquity (1.12.12jolicloud14) robby; urgency=low
+
+  * Do not make use an OEM-specific hostname when using oem-config mode
+  * Refreshed timezone template
+
+ -- Adam McDaniel <adam@jolicloud.org>  Tue, 10 Aug 2010 23:19:56 -0600
+
 ubiquity (1.12.12jolicloud13) robby; urgency=low
 
   [ Alex Launi ]

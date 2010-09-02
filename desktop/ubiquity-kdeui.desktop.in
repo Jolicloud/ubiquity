@@ -9,4 +9,4 @@ Icon=ubiquity
 Terminal=false
 Categories=KDE;Qt;System;
 OnlyShowIn=KDE;
-X-Ubuntu-Gettext-Domain=ubiquity
+X-Ubuntu-Gettext-Domain=ubiquity-desktop

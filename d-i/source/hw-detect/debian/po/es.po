@@ -47,9 +47,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: debian-installer\n"
-"Report-Msgid-Bugs-To: debian-boot@lists.debian.org\n"
-"POT-Creation-Date: 2008-07-23 22:50+0000\n"
-"PO-Revision-Date: 2008-09-06 22:55+0200\n"
+"Report-Msgid-Bugs-To: hw-detect@packages.debian.org\n"
+"POT-Creation-Date: 2009-07-21 22:48+0000\n"
+"PO-Revision-Date: 2009-01-04 01:31+0100\n"
 "Last-Translator: Javier Fernández-Sanguino Peña <jfs@debian.org>\n"
 "Language-Team:  Debian Spanish <debian-l10n-spanish@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -152,7 +152,7 @@ msgstr "Detectar discos"
 #. :sl1:
 #: ../disk-detect.templates:2001
 msgid "Detecting disks and all other hardware"
-msgstr "Detectando los discos y todo el demás hardware"
+msgstr "Detectando los discos y el resto del hardware"
 
 #. Type: select
 #. Choices
@@ -200,6 +200,28 @@ msgstr "No se encontraron medios que se puedan particionar."
 msgid "Please check that a hard disk is attached to this machine."
 msgstr ""
 "Por favor, asegúrese de que se ha conectado un disco duro a este equipo."
+
+#. Type: boolean
+#. Description
+#: ../disk-detect.templates:7001
+msgid "Activate Serial ATA RAID devices?"
+msgstr "¿Activar dispositivos serie ATA RAID?"
+
+#. Type: boolean
+#. Description
+#: ../disk-detect.templates:7001
+msgid ""
+"One or more drives containing Serial ATA RAID configurations have been "
+"found. Do you wish to activate these RAID devices?"
+msgstr ""
+"Uno o más dispositivos que contienen configuración serie ATA RAID han sido "
+"encontrados. ¿Desea activar estos dispositivos?"
+
+#. Type: text
+#. Description
+#: ../disk-detect.templates:8001
+msgid "login to iSCSI targets"
+msgstr "acceso a objetivos iSCi"
 
 #. Type: text
 #. Description
@@ -252,6 +274,8 @@ msgstr ""
 
 #. Type: boolean
 #. Description
+#. FIXME: not in use and kept just while we're still in doubt it will
+#. be needed
 #. :sl2:
 #: ../hw-detect.templates:6001
 msgid "Start PC card services?"
@@ -259,6 +283,8 @@ msgstr "¿Desea iniciar los servicios de tarjetas de PC?"
 
 #. Type: boolean
 #. Description
+#. FIXME: not in use and kept just while we're still in doubt it will
+#. be needed
 #. :sl2:
 #: ../hw-detect.templates:6001
 msgid ""

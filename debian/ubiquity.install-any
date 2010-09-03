@@ -1,6 +1,6 @@
 ubiquity/*.py usr/lib/ubiquity/ubiquity
 ubiquity/components/__init__.py usr/lib/ubiquity/ubiquity/components
-ubiquity/components/summary.py usr/lib/ubiquity/ubiquity/components
+ubiquity/components/ubi-summary.py usr/lib/ubiquity/plugins
 ubiquity/components/install.py usr/lib/ubiquity/ubiquity/components
 ubiquity/frontend/__init__.py usr/lib/ubiquity/ubiquity/frontend
 ubiquity/frontend/base.py usr/lib/ubiquity/ubiquity/frontend
@@ -8,13 +8,13 @@ ubiquity/frontend/noninteractive.py usr/lib/ubiquity/ubiquity/frontend
 compat/anna-install usr/lib/ubiquity/compat
 compat/apt-install usr/lib/ubiquity/compat
 compat/depmod usr/lib/ubiquity/compat
+compat/linux-boot-prober usr/lib/ubiquity/compat
+compat/os-prober usr/lib/ubiquity/compat
 compat/udpkg usr/lib/ubiquity/compat
 compat/update-dev usr/lib/ubiquity/compat
 scripts/* usr/share/ubiquity
-desktop/ubiquity.png usr/share/pixmaps
 pixmaps/world_map-960.png usr/share/ubiquity/pixmaps
 pixmaps/earth.jpg usr/share/ubiquity/pixmaps
-apport/ubiquity.py usr/share/apport/package-hooks
 bin/ubiquity-dm usr/bin
 
 # apt-setup
@@ -37,14 +37,17 @@ ubiquity/components/check_kernels.py usr/lib/ubiquity/ubiquity/components
 d-i/source/choose-mirror/choose-mirror usr/lib/ubiquity/choose-mirror
 
 # clock-setup
-ubiquity/components/clock_setup.py usr/lib/ubiquity/ubiquity/components
+d-i/source/clock-setup/set-date-epoch sbin
 
 # console-setup
 compat/locale usr/lib/ubiquity/console-setup
-ubiquity/components/console_setup.py usr/lib/ubiquity/ubiquity/components
-ubiquity/components/console_setup_apply.py usr/lib/ubiquity/ubiquity/components
+scripts/console-setup-apply usr/lib/ubiquity
+ubiquity/components/ubi-console-setup.py usr/lib/ubiquity/plugins
+debian/kbdnames.gz usr/share/console-setup-mini
+d-i/source/console-setup/Keyboard/pc105.tree usr/lib/ubiquity/console-setup
 
 # debian-installer-utils
+d-i/source/debian-installer-utils/block-attr bin
 d-i/source/debian-installer-utils/chroot-setup.sh lib
 d-i/source/debian-installer-utils/debconf-get bin
 d-i/source/debian-installer-utils/in-target bin
@@ -52,7 +55,6 @@ d-i/source/debian-installer-utils/list-devices bin
 d-i/source/debian-installer-utils/log-output bin
 d-i/source/debian-installer-utils/mapdevfs bin
 d-i/source/debian-installer-utils/register-module bin
-d-i/source/debian-installer-utils/register-module.post-base-installer usr/lib/ubiquity/debian-installer-utils
 d-i/source/debian-installer-utils/search-path bin
 d-i/source/debian-installer-utils/update-dev bin
 d-i/source/debian-installer-utils/user-params bin
@@ -69,35 +71,37 @@ d-i/source/localechooser/translation-check usr/lib/ubiquity/localechooser
 d-i/source/localechooser/debian/localechooser/usr/share/localechooser/languagelist.data.gz usr/lib/ubiquity/localechooser
 d-i/source/localechooser/regionmap usr/lib/ubiquity/localechooser
 d-i/source/localechooser/debian/short-tmp/shortlists usr/lib/ubiquity/localechooser
-ubiquity/components/language.py usr/lib/ubiquity/ubiquity/components
-ubiquity/components/language_apply.py usr/lib/ubiquity/ubiquity/components
+ubiquity/components/ubi-language.py usr/lib/ubiquity/plugins
+scripts/localechooser-apply usr/lib/ubiquity
+
+# netcfg
+d-i/source/netcfg/netcfg usr/lib/ubiquity/netcfg
+scripts/netcfg-wrapper usr/lib/ubiquity
+ubiquity/components/ubi-network.py usr/lib/ubiquity/plugins
 
 # partconf
 d-i/source/partconf/debian/partconf-*/* .
 
 # partman
 d-i/source/partman-*/debian/partman-*/* .
-partman/undo.d/* lib/partman/undo.d
-partman/update.d/* lib/partman/update.d
-partman/check.d/* lib/partman/check.d
-partman/commit.d/* lib/partman/commit.d
-ubiquity/components/partman.py usr/lib/ubiquity/ubiquity/components
+ubiquity/components/ubi-partman.py usr/lib/ubiquity/plugins
 ubiquity/components/partman_commit.py usr/lib/ubiquity/ubiquity/components
 
 # preseed
 d-i/source/preseed/preseed_command bin
 
+# tasksel
+ubiquity/components/ubi-tasks.py usr/lib/ubiquity/plugins
+
 # tzsetup
 d-i/source/tzsetup/debian/tzmap usr/lib/ubiquity/tzsetup
 d-i/source/tzsetup/tzsetup usr/lib/ubiquity/tzsetup
-ubiquity/components/timezone.py usr/lib/ubiquity/ubiquity/components
-ubiquity/components/timezone_apply.py usr/lib/ubiquity/ubiquity/components
+ubiquity/components/ubi-timezone.py usr/lib/ubiquity/plugins
 
 # user-setup
 d-i/source/user-setup/functions.sh usr/lib/ubiquity/user-setup
 d-i/source/user-setup/reserved-usernames usr/lib/ubiquity/user-setup
-ubiquity/components/usersetup.py usr/lib/ubiquity/ubiquity/components
-ubiquity/components/usersetup_apply.py usr/lib/ubiquity/ubiquity/components
+ubiquity/components/ubi-usersetup.py usr/lib/ubiquity/plugins
 
 # migration-assistant
 d-i/source/migration-assistant/ma-script-utils usr/share/migration-assistant
@@ -106,5 +110,4 @@ d-i/source/migration-assistant/ma-apply usr/lib/ubiquity/migration-assistant
 d-i/source/migration-assistant/ma-search-users usr/lib/ubiquity/migration-assistant
 d-i/source/migration-assistant/ma-search-items usr/lib/ubiquity/migration-assistant
 d-i/source/migration-assistant/ma-import usr/lib/ubiquity/migration-assistant
-ubiquity/components/migrationassistant.py usr/lib/ubiquity/ubiquity/components
-ubiquity/components/migrationassistant_apply.py usr/lib/ubiquity/ubiquity/components
+ubiquity/components/ubi-migrationassistant.py usr/lib/ubiquity/plugins

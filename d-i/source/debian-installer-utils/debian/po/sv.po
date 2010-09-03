@@ -19,9 +19,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: debian-installer\n"
-"Report-Msgid-Bugs-To: debian-boot@lists.debian.org\n"
-"POT-Creation-Date: 2008-08-23 22:49+0000\n"
-"PO-Revision-Date: 2009-02-18 10:57+0100\n"
+"Report-Msgid-Bugs-To: debian-installer-utils@packages.debian.org\n"
+"POT-Creation-Date: 2009-07-02 20:15+0000\n"
+"PO-Revision-Date: 2009-11-09 08:36+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <debian-l10n-swedish@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -86,8 +86,8 @@ msgstr "Starta ett skal"
 #. that are only supported in the graphical version of the installer
 #. :sl2:
 #: ../di-utils-exit-installer.templates:1001
-msgid "Exit installer demo"
-msgstr "Avsluta demonstrationen av installationsprogrammet"
+msgid "Exit installer"
+msgstr "Avsluta installationsprogrammet"
 
 #. Type: boolean
 #. Description
@@ -123,7 +123,7 @@ msgstr "Avbryt installationen"
 #. :sl1:
 #: ../di-utils.templates:1001
 msgid "Registering modules..."
-msgstr "Registrerar moduler ..."
+msgstr "Registrerar moduler..."
 
 #. Type: error
 #. Description

@@ -23,6 +23,14 @@ KERNEL_FLAVOUR=$(uname -r | cut -d - -f 3-)
 MACHINE="$(uname -m)"
 NUMCPUS=$(cat /var/numcpus 2>/dev/null) || true
 CPUINFO=/proc/cpuinfo
+MEMTOTAL=0
+if [ -x /usr/lib/base-installer/dmi-available-memory ]; then
+	MEMTOTAL="$(/usr/lib/base-installer/dmi-available-memory)"
+fi
+if [ "$MEMTOTAL" = 0 ]; then
+	MEMTOTAL="$(grep '^MemTotal:[[:space:]]*' /proc/meminfo | \
+		    sed 's/^MemTotal:[[:space:]]*//; s/ .*//')"
+fi
 
 # files and directories
 APT_SOURCES=/target/etc/apt/sources.list
@@ -141,8 +149,7 @@ install_filesystems () {
 		fi
 
 		if type dmraid >/dev/null 2>&1; then
-			if dmraid -s -c >/dev/null 2>&1 && \
-			   [ "$(dmraid -s -c | grep -iv "No RAID disks")" ]; then
+			if dmraid -s -c >/dev/null 2>&1; then
 				apt-install dmraid
 			fi
 		fi
@@ -155,6 +162,13 @@ install_filesystems () {
 
 configure_apt_preferences () {
 	[ ! -d "$APT_CONFDIR" ] && mkdir -p "$APT_CONFDIR"
+
+	# Install Recommends?
+	if db_get base-installer/install-recommends && [ "$RET" = false ]; then
+		cat >$APT_CONFDIR/00InstallRecommends <<EOT
+APT::Install-Recommends "false";
+EOT
+	fi
 
 	# Make apt trust Debian CDs. This is not on by default (we think).
 	# This will be left in place on the installed system.
@@ -329,7 +343,7 @@ kernel_update_list () {
 	(set +e;
 	# Hack to get the metapackages in the right order; should be
 	# replaced by something better at some point.
-	chroot /target apt-cache search ^linux- | grep '^linux-\(amd64\|386\|686\|k7\|generic\|server\|virtual\|rt\|xen\|power\|cell\|itanium\|mckinley\|sparc\|hppa\|lpia\)';
+	chroot /target apt-cache search ^linux- | grep '^linux-\(amd64\|386\|686\|k7\|generic\|server\|virtual\|preempt\|rt\|xen\|power\|cell\|ia64\|sparc\|hppa\|imx51\|dove\|omap\)';
 	chroot /target apt-cache search ^linux-image- | grep -v '^linux-image-2\.';
 	chroot /target apt-cache search ^linux-image-2. | sort -r) | \
 	cut -d" " -f1 | uniq > "$KERNEL_LIST.unfiltered"
@@ -578,7 +592,7 @@ EOF
 		# Select and set driver inclusion policy for initramfs-tools
 		if [ "$rd_generator" = initramfs-tools ]; then
 			if db_get base-installer/initramfs-tools/driver-policy && \
-			   [ "$RET" = "" ]; then
+			   [ -z "$RET" ]; then
 				# Get default for architecture
 				db_get base-installer/kernel/linux/initramfs-tools/driver-policy
 				db_set base-installer/initramfs-tools/driver-policy "$RET"
@@ -635,8 +649,8 @@ EOF
 		else
 			resume=
 		fi
-		if [ "$resume" ] && PATH="/lib/udev:$PATH" type vol_id >/dev/null 2>&1; then
-			resume_uuid="$(PATH="/lib/udev:$PATH" vol_id -u "$resume" || true)"
+		if [ "$resume" ]; then
+			resume_uuid="$(block-attr --uuid "$resume" || true)"
 			if [ "$resume_uuid" ]; then
 				resume="UUID=$resume_uuid"
 			fi
@@ -668,10 +682,46 @@ EOF
 	# Advance progress bar to 30% of allocated space for install_linux
 	update_progress 30 100
 
+	# Always ignore Recommends for the kernel; we don't want to install
+	# bootloaders at this point
+	cat >$APT_CONFDIR/00InstallRecommendsKernel <<EOT
+APT::Install-Recommends "false";
+EOT
+
 	# Install the kernel
 	db_subst base-installer/section/install_kernel_package SUBST0 "$KERNEL"
 	db_progress INFO base-installer/section/install_kernel_package
 	log-output -t base-installer apt-install "$KERNEL" || kernel_install_failed=$?
+
+	rm -f $APT_CONFDIR/00InstallRecommendsKernel
+
+	db_get base-installer/kernel/headers
+	if [ "$RET" = true ]; then
+		# Advance progress bar to 80% of allocated space for install_linux
+		update_progress 80 100
+
+		# Install kernel headers if possible
+		HEADERS="$(echo "$KERNEL" | sed 's/linux\(-image\|\)/linux-headers/')"
+		db_subst base-installer/section/install_kernel_package SUBST0 "$HEADERS"
+		db_progress INFO base-installer/section/install_kernel_package
+		log-output -t base-installer apt-install "$HEADERS" || true
+	fi
+
+	db_get base-installer/kernel/backports-modules
+	if [ "$RET" ]; then
+		BACKPORTS_MODULES="$RET"
+
+		# Advance progress bar to 85% of allocated space for install_linux
+		update_progress 85 100
+
+		# Install kernel backports modules if possible
+		for backports_module in $BACKPORTS_MODULES; do
+			LBM="$(echo "$KERNEL" | sed "s/linux\\(-image\\|\\)/linux-backports-modules-$backports_module-$DISTRIBUTION/")"
+			db_subst base-installer/section/install_kernel_package SUBST0 "$LBM"
+			db_progress INFO base-installer/section/install_kernel_package
+			log-output -t base-installer apt-install "$LBM" || true
+		done
+	fi
 
 	# Advance progress bar to 90% of allocated space for install_linux
 	update_progress 90 100
@@ -801,6 +851,7 @@ Acquire::cdrom {
     Mount  "true";
     UMount "true";
   };
+  AutoDetect "false";
 }
 EOT
 

@@ -1,23 +1,27 @@
-# translation of gtk+.HEAD.hi.po to maithili
+# translation of gtk+.master.po to Hindi
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 #
 # G Karunakar <karunakar@freedomink.org>, 2003.
 # Ravishankar Shrivastava <raviratlami@yahoo.com>, 2004.
 # Rajesh Ranjan <rranjan@redhat.com>, 2005, 2006, 2009.
+# Manoj Kumar Giri <mgiri@redhat.com>, 2009.
+# Rajesh Ranjan <rajesh672@gmail.com>, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.HEAD.hi\n"
+"Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: ubiquity@packages.debian.org\n"
-"POT-Creation-Date: 2009-03-19 12:33+0000\n"
-"PO-Revision-Date: 2009-03-03 15:50+0530\n"
-"Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
-"Language-Team: maithili <maithili.sf.net>\n"
+"POT-Creation-Date: 2010-03-12 16:01+0000\n"
+"PO-Revision-Date: 2009-08-24 17:09+0530\n"
+"Last-Translator: Rajesh Ranjan <rajesh672@gmail.com>\n"
+"Language-Team: Hindi <hindi.sf.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -93,3 +97,41 @@ msgstr "हाँ (_Y)"
 msgctxt "Stock label"
 msgid "_No"
 msgstr "नहीं (_N)"
+
+#  Translate to default:RTL if you want your widgets
+#  * to be RTL, otherwise translate to default:LTR.
+#  * Do *not* translate it to "predefinito:LTR", if it
+#  * it isn't default:LTR or default:RTL it will not work
+#. Type: text
+#. Description
+#. Translations for this template are imported from GTK. Please keep them in
+#. sync.
+#: ../ubiquity.templates-imported:9001
+msgid "default:LTR"
+msgstr "default:LTR"
+
+#. Type: text
+#. Description
+#. Translations for this template are imported from GTK. Please keep them in
+#. sync.
+#: ../ubiquity.templates-imported:10001
+#, no-c-format
+msgid "%l:%M %p"
+msgstr "%l:%M %p"
+
+#. Type: text
+#. Description
+#. Translations for this template are imported from GTK. Please keep them in
+#. sync.
+#: ../ubiquity.templates-imported:11001
+#, no-c-format
+msgid "%H:%M"
+msgstr "%H:%M"
+
+#. Type: text
+#. Description
+#. Translations for this template are imported from GTK. Please keep them in
+#. sync.
+#: ../ubiquity.templates-imported:12001
+msgid "24-hour"
+msgstr "24-hour"

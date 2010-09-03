@@ -20,8 +20,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pa\n"
-"Report-Msgid-Bugs-To: debian-boot@lists.debian.org\n"
-"POT-Creation-Date: 2008-07-23 22:50+0000\n"
+"Report-Msgid-Bugs-To: hw-detect@packages.debian.org\n"
+"POT-Creation-Date: 2009-07-21 22:48+0000\n"
 "PO-Revision-Date: 2008-09-04 07:20+0000\n"
 "Last-Translator: Amanpreet Singh Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -172,6 +172,26 @@ msgstr "ਕੋਈ ਪਾਰਟੀਸ਼ਨ-ਯੋਗ ਮਾਧਿਅਮ ਨਹ�
 msgid "Please check that a hard disk is attached to this machine."
 msgstr "ਜਾਂਚ ਕਰੋ ਕਿ ਹਾਰਡ ਡਿਸਕ ਇਸ ਮਸ਼ੀਨ ਨਾਲ ਜੁੜੀ ਹੈ ਜੀ।"
 
+#. Type: boolean
+#. Description
+#: ../disk-detect.templates:7001
+msgid "Activate Serial ATA RAID devices?"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../disk-detect.templates:7001
+msgid ""
+"One or more drives containing Serial ATA RAID configurations have been "
+"found. Do you wish to activate these RAID devices?"
+msgstr ""
+
+#. Type: text
+#. Description
+#: ../disk-detect.templates:8001
+msgid "login to iSCSI targets"
+msgstr ""
+
 #. Type: text
 #. Description
 #. :sl1:
@@ -222,6 +242,8 @@ msgstr ""
 
 #. Type: boolean
 #. Description
+#. FIXME: not in use and kept just while we're still in doubt it will
+#. be needed
 #. :sl2:
 #: ../hw-detect.templates:6001
 msgid "Start PC card services?"
@@ -229,6 +251,8 @@ msgstr "PC ਕਾਰਡ ਸਰਵਿਸ ਨੂੰ ਸ਼ੁਰੂ ਕਰਨਾ ਹ�
 
 #. Type: boolean
 #. Description
+#. FIXME: not in use and kept just while we're still in doubt it will
+#. be needed
 #. :sl2:
 #: ../hw-detect.templates:6001
 msgid ""

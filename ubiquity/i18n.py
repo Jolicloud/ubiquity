@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8; Mode: Python; indent-tabs-mode: nil; tab-width: 4 -*-
 
 # Copyright (C) 2006, 2007, 2008 Canonical Ltd.
 # Written by Colin Watson <cjwatson@ubuntu.com>.
@@ -21,7 +21,9 @@ import re
 import subprocess
 import codecs
 import os
-from ubiquity import misc
+import locale
+import sys
+from ubiquity import misc, im_switch
 
 _supported_locales = None
 
@@ -38,9 +40,33 @@ def get_supported_locales():
     return _supported_locales
 
 
+# if 'just_country' is True, only the country is changing
+def reset_locale(frontend, just_country=False):
+    di_locale = frontend.db.get('debian-installer/locale')
+    if di_locale not in get_supported_locales():
+        di_locale = frontend.db.get('debian-installer/fallbacklocale')
+    if not di_locale:
+        # TODO cjwatson 2006-07-17: maybe fetch
+        # languagechooser/language-name and set a language based on
+        # that?
+        di_locale = 'en_US.UTF-8'
+    if 'LANG' not in os.environ or di_locale != os.environ['LANG']:
+        os.environ['LANG'] = di_locale
+        os.environ['LANGUAGE'] = di_locale
+        try:
+            locale.setlocale(locale.LC_ALL, '')
+        except locale.Error, e:
+            print >>sys.stderr, 'locale.setlocale failed: %s (LANG=%s)' % \
+                                (e, di_locale)
+        if not just_country:
+            misc.execute_root('fontconfig-voodoo',
+                                '--auto', '--force', '--quiet')
+        im_switch.start_im()
+    return di_locale
+
 _strip_context_re = None
 
-def strip_context(question, string):
+def strip_context(unused_question, string):
     # po-debconf context
     global _strip_context_re
     if _strip_context_re is None:
@@ -52,7 +78,7 @@ def strip_context(question, string):
 
 _translations = None
 
-def get_translations(languages=None, core_names=[]):
+def get_translations(languages=None, core_names=[], extra_prefixes=[]):
     """Returns a dictionary {name: {language: description}} of translatable
     strings.
 
@@ -63,7 +89,7 @@ def get_translations(languages=None, core_names=[]):
     cached version will be returned."""
 
     global _translations
-    if _translations is None or languages is not None or len(core_names) > 0:
+    if _translations is None or languages is not None or core_names or extra_prefixes:
         if languages is None:
             use_langs = None
         else:
@@ -74,17 +100,19 @@ def get_translations(languages=None, core_names=[]):
                 use_langs.add(ll_cc)
                 use_langs.add(ll)
 
+        prefixes = 'ubiquity|partman/text/undo_everything|partman/text/unusable|partman-basicfilesystems/bad_mountpoint|partman-basicfilesystems/text/specify_mountpoint|partman-basicmethods/text/format|partman-newworld/no_newworld|partman-partitioning|partman-target/no_root|partman-target/text/method|grub-installer/bootdev|popularity-contest/participate'
+        prefixes = reduce(lambda x, y: x+'|'+y, extra_prefixes, prefixes)
+
         _translations = {}
         devnull = open('/dev/null', 'w')
-        # necessary?
-        def subprocess_setup():
-            misc.regain_privileges()
         db = subprocess.Popen(
             ['debconf-copydb', 'templatedb', 'pipe',
              '--config=Name:pipe', '--config=Driver:Pipe',
              '--config=InFd:none',
-             '--pattern=^(ubiquity|partman/text/undo_everything|partman/text/unusable|partman-basicfilesystems/bad_mountpoint|partman-basicfilesystems/text/specify_mountpoint|partman-basicmethods/text/format|partman-newworld/no_newworld|partman-partitioning|partman-target/no_root|partman-target/text/method|grub-installer/bootdev|popularity-contest/participate)'],
-            stdout=subprocess.PIPE, stderr=devnull, preexec_fn=subprocess_setup)
+             '--pattern=^(%s)' % prefixes],
+            stdout=subprocess.PIPE, stderr=devnull,
+            # necessary?
+            preexec_fn=misc.regain_privileges)
         question = None
         descriptions = {}
         fieldsplitter = re.compile(r':\s*')
@@ -132,7 +160,8 @@ def get_translations(languages=None, core_names=[]):
                     # TODO cjwatson 2006-09-04: a bit of a hack to get the
                     # description and extended description separately ...
                     if question in ('grub-installer/bootdev',
-                                    'partman-newworld/no_newworld'):
+                                    'partman-newworld/no_newworld',
+                                    'ubiquity/text/error_updating_installer'):
                         descriptions["extended:%s" % lang] = \
                             value.replace('\\n', '\n')
 
@@ -168,19 +197,21 @@ string_questions = {
 
 string_extended = set('grub_device_label')
 
-def map_widget_name(name):
+def map_widget_name(prefix, name):
     """Map a widget name to its translatable template."""
+    if prefix is None:
+        prefix = 'ubiquity/text'
     if '/' in name:
         question = name
     elif name in string_questions:
         question = string_questions[name]
     else:
-        question = 'ubiquity/text/%s' % name
+        question = '%s/%s' % (prefix, name)
     return question
 
-def get_string(name, lang):
+def get_string(name, lang, prefix=None):
     """Get the translation of a single string."""
-    question = map_widget_name(name)
+    question = map_widget_name(prefix, name)
     translations = get_translations()
     if question not in translations:
         return None
@@ -222,5 +253,98 @@ def ascii_transliterate(exc):
         return u'', exc.start + 1
 
 codecs.register_error('ascii_transliterate', ascii_transliterate)
+
+
+# Returns a tuple of (current language, sorted choices, display map).
+def get_languages(current_language_index=-1, only_installable=False):
+    import gzip
+    import PyICU
+
+    current_language = "English"
+
+    if only_installable:
+        from apt.cache import Cache
+        cache = Cache()
+
+    languagelist = gzip.open('/usr/lib/ubiquity/localechooser/languagelist.data.gz')
+    language_display_map = {}
+    i = 0
+    for line in languagelist:
+        line = unicode(line, 'utf-8')
+        if line == '' or line == '\n':
+            continue
+        code, name, trans = line.strip(u'\n').split(u':')[1:]
+        if code in ('dz', 'km'):
+            i += 1
+            continue
+
+        if only_installable and code != 'C':
+            pkg_name = 'language-pack-%s' % code
+            #special case these
+            if pkg_name.endswith('_CN'):
+                pkg_name = 'language-pack-zh-hans'
+            elif pkg_name.endswith('_TW'):
+                pkg_name = 'language-pack-zh-hant'
+            elif pkg_name.endswith('_NO'):
+                pkg_name = pkg_name.split('_NO')[0]
+            elif pkg_name.endswith('_BR'):
+                pkg_name = pkg_name.split('_BR')[0]
+            try:
+                pkg = cache[pkg_name]
+                if not (pkg.installed or pkg.candidate):
+                    i += 1
+                    continue
+            except KeyError:
+                i += 1
+                continue
+
+        language_display_map[trans] = (name, code)
+        if i == current_language_index:
+            current_language = trans
+        i += 1
+    languagelist.close()
+
+    if only_installable:
+        del cache
+
+    try:
+        # Note that we always collate with the 'C' locale.  This is far
+        # from ideal.  But proper collation always requires a specific
+        # language for its collation rules (languages frequently have
+        # custom sorting).  This at least gives us common sorting rules,
+        # like stripping accents.
+        collator = PyICU.Collator.createInstance(PyICU.Locale('C'))
+    except:
+        collator = None
+
+    def compare_choice(x):
+        if language_display_map[x][1] == 'C':
+            return None # place C first
+        if collator:
+            try:
+                return collator.getCollationKey(x).getByteArray()
+            except:
+                pass
+        # Else sort by unicode code point, which isn't ideal either,
+        # but also has the virtue of sorting like-glyphs together
+        return x
+
+    sorted_choices = sorted(language_display_map, key=compare_choice)
+
+    return current_language, sorted_choices, language_display_map
+
+def default_locales():
+    languagelist = open('/usr/lib/ubiquity/localechooser/languagelist')
+    defaults = {}
+    for line in languagelist:
+        line = unicode(line, 'utf-8')
+        if line == '' or line == '\n':
+            continue
+        bits = line.strip(u'\n').split(u';')
+        code = bits[0]
+        locale = bits[4]
+        defaults[code] = locale
+    languagelist.close()
+    return defaults
 
 # vim:ai:et:sts=4:tw=80:sw=4:

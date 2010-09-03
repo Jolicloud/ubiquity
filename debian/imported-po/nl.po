@@ -5,6 +5,7 @@
 # Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>, 2002.
 # Ronald Hummelink <ronald@hummelink.xs4all.nl>, 2002.
 # Tino Meinen <tino.meinen@gmail.com>, 2002–2009.
+# Reinout van Schouwen <reinouts@gnome.org>, 2009
 #
 # expander             - samenvouwer/openvouwen
 # image format         - bestandsformaat
@@ -24,9 +25,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: ubiquity@packages.debian.org\n"
-"POT-Creation-Date: 2009-03-19 12:33+0000\n"
-"PO-Revision-Date: 2009-02-23 02:41+0900\n"
-"Last-Translator: Tino Meinen <tino.meinen@gmail.com>\n"
+"POT-Creation-Date: 2010-03-12 16:01+0000\n"
+"PO-Revision-Date: 2009-09-11 22:33+0100\n"
+"Last-Translator: Reinout van Schouwen <reinouts@gnome.org>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -105,3 +106,37 @@ msgstr "_Ja"
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Nee"
+
+#. Type: text
+#. Description
+#. Translations for this template are imported from GTK. Please keep them in
+#. sync.
+#: ../ubiquity.templates-imported:9001
+msgid "default:LTR"
+msgstr "default:LTR"
+
+#. Type: text
+#. Description
+#. Translations for this template are imported from GTK. Please keep them in
+#. sync.
+#: ../ubiquity.templates-imported:10001
+#, no-c-format
+msgid "%l:%M %p"
+msgstr "%l:%M %P"
+
+#. Type: text
+#. Description
+#. Translations for this template are imported from GTK. Please keep them in
+#. sync.
+#: ../ubiquity.templates-imported:11001
+#, no-c-format
+msgid "%H:%M"
+msgstr "%H:%M"
+
+#. Type: text
+#. Description
+#. Translations for this template are imported from GTK. Please keep them in
+#. sync.
+#: ../ubiquity.templates-imported:12001
+msgid "24-hour"
+msgstr "24-hour"

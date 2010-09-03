@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8; Mode: Python; indent-tabs-mode: nil; tab-width: 4 -*-
 
 # Copyright (C) 2009 Canonical Ltd.
 # Written by Evan Dandrea <evand@ubuntu.com>.
@@ -23,7 +23,6 @@ import math
 import cairo
 import gtk
 import glib
-from gtk import gdk
 import gobject
 import os
 import datetime
@@ -35,7 +34,7 @@ from ubiquity.segmented_bar import CairoExtensions
 # to the mouse.
 color_codes = {
 # We don't handle UTC-12, but as that's just the US Minor Outlying Islands, I
-# think we're ok, as Wikiepdia says, "As of 2008, none of the islands has any
+# think we're ok, as Wikipedia says, "As of 2008, none of the islands has any
 # permanent residents."
 '-11.0' : [43, 0, 0, 255],
 '-10.0' : [85, 0, 0, 255],
@@ -43,8 +42,10 @@ color_codes = {
 '-9.0' : [128, 0, 0, 255],
 '-8.0' : [170, 0, 0, 255],
 '-7.0' : [212, 0, 0, 255],
-'-6.0' : [255, 0, 0, 255],
+'-6.0|north' : [255, 0, 1, 255],
+'-6.0|south' : [255, 0, 0, 255],
 '-5.0' : [255, 42, 42, 255],
+'-4.5' : [192, 255, 0, 255],
 '-4.0' : [255, 85, 85, 255],
 '-3.5' : [0, 255, 0, 255],
 '-3.0' : [255, 128, 128, 255],
@@ -135,6 +136,7 @@ class TimezoneMap(gtk.Widget):
         gtk.Widget.__init__(self)
         self.tzdb = database
         self.image_path = image_path
+        self.time_fmt = '%X'
         self.orig_background = \
             gtk.gdk.pixbuf_new_from_file(os.path.join(self.image_path,
             'bg.png'))
@@ -152,23 +154,13 @@ class TimezoneMap(gtk.Widget):
         self.distances = []
         self.previous_click = (-1, -1)
         self.dist_pos = 0
-        
+
+    def set_time_format(self, time_fmt):
+        self.time_fmt = time_fmt
+
     def do_size_request(self, requisition):
-        # Set a small size request to create an aspect ratio for the parent
-        # widget.
-        screen_height = gtk.gdk.get_default_root_window().get_screen().get_height()
-        # fudge factor for rest of timezone page + panels + a bit for luck;
-        # since the current background image is 409 pixels high, 1024+768
-        # screens and better should end up with a full-sized background
-        width = self.orig_background.get_width()
-        height = self.orig_background.get_height()
-        margin = 260
-        if height > screen_height - margin:
-            ratio = float(width)/height
-            height = screen_height - margin
-            width = int(ratio * height)
-        requisition.width = width
-        requisition.height = height
+        requisition.width = self.orig_background.get_width() / 2
+        requisition.height = self.orig_background.get_height() / 2
         gtk.Widget.do_size_request(self, requisition)
 
     def do_size_allocate(self, allocation):
@@ -183,15 +175,15 @@ class TimezoneMap(gtk.Widget):
 
     def do_realize(self):
         self.set_flags(self.flags() | gtk.REALIZED)
-        self.window = gdk.Window(
+        self.window = gtk.gdk.Window(
             self.get_parent_window(),
             width=self.allocation.width,
             height=self.allocation.height,
-            window_type=gdk.WINDOW_CHILD,
-            wclass=gdk.INPUT_OUTPUT,
+            window_type=gtk.gdk.WINDOW_CHILD,
+            wclass=gtk.gdk.INPUT_OUTPUT,
             event_mask=self.get_events() |
-                        gdk.EXPOSURE_MASK |
-                        gdk.BUTTON_PRESS_MASK)
+                        gtk.gdk.EXPOSURE_MASK |
+                        gtk.gdk.BUTTON_PRESS_MASK)
         self.window.set_user_data(self)
         self.style.attach(self.window)
         self.style.set_background(self.window, gtk.STATE_NORMAL)
@@ -199,11 +191,11 @@ class TimezoneMap(gtk.Widget):
         cursor = gtk.gdk.Cursor(gtk.gdk.HAND2)
         self.window.set_cursor(cursor)
 
-    def do_expose_event(self, event):
+    def do_expose_event(self, unused_event):
         cr = self.window.cairo_create()
         cr.set_source_pixbuf(self.background, 0, 0)
         cr.paint()
-        
+
         # Render highlight.
         # Possibly not the best solution, though in my head it seems better
         # than keeping two copies (original and resized) of every timezone in
@@ -212,7 +204,7 @@ class TimezoneMap(gtk.Widget):
         if self.selected_offset != None:
             try:
                 pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(self.image_path,
-                    'timezone_%s.png' % self.selected_offset))
+                    'timezone_%s.png' % self.selected_offset.split('|')[0]))
                 pixbuf = pixbuf.scale_simple(self.allocation.width,
                     self.allocation.height, gtk.gdk.INTERP_BILINEAR)
                 cr.set_source_pixbuf(pixbuf, 0, 0)
@@ -225,10 +217,8 @@ class TimezoneMap(gtk.Widget):
         height = self.background.get_height()
         width = self.background.get_width()
 
-        only_draw_selected = True
-        for loc in self.tzdb.locations:
-            if not (self.selected and loc.zone == self.selected):
-                continue
+        loc = self.selected and self.tzdb.get_loc(self.selected)
+        if loc:
             pointx = convert_longitude_to_x(loc.longitude, width)
             pointy = convert_latitude_to_y(loc.latitude, height)
 
@@ -241,7 +231,7 @@ class TimezoneMap(gtk.Widget):
 
             # Draw the time.
             now = datetime.datetime.now(loc.info)
-            time_text = now.strftime('%X')
+            time_text = now.strftime(self.time_fmt)
             cr.select_font_face('Sans', cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
             cr.set_font_size(12.0)
             xbearing, ybearing, width, height, xadvance, yadvance = \
@@ -264,33 +254,31 @@ class TimezoneMap(gtk.Widget):
     def timeout(self):
         self.queue_draw()
         return True
-    
-    def mapped(self, widget, event):
+
+    def mapped(self, unused_widget, unused_event):
         if self.update_timeout is None:
             self.update_timeout = gobject.timeout_add(1000, self.timeout)
 
-    def unmapped(self, widget, event):
+    def unmapped(self, unused_widget, unused_event):
         if self.update_timeout is not None:
             gobject.source_remove(self.update_timeout)
             self.update_timeout = None
 
     def select_city(self, city):
         self.selected = city
-        for loc in self.tzdb.locations:
-            if loc.zone == city:
-                offset = (loc.raw_utc_offset.days * 24) + \
-                    (loc.raw_utc_offset.seconds / 60.0 / 60.0)
-                self.selected_offset = str(offset)
+        loc = self.tzdb.get_loc(city)
+        if loc:
+            offset = (loc.raw_utc_offset.days * 24) + \
+                (loc.raw_utc_offset.seconds / 60.0 / 60.0)
+            self.selected_offset = str(offset)
         self.queue_draw()
 
-    def button_press(self, widget, event):
-        x = int(event.x)
-        y = int(event.y)
-        
-        o = None
+    def convert_xy_to_offset(self, x, y):
+        pixels = self.visible_map_pixels
+        rowstride = self.visible_map_rowstride
+        x = int(x)
+        y = int(y)
         try:
-            pixels = self.visible_map_pixels
-            rowstride = self.visible_map_rowstride
             c = []
             c.append(ord(pixels[(rowstride * y + x * 4)]))
             c.append(ord(pixels[(rowstride * y + x * 4)+1]))
@@ -298,35 +286,55 @@ class TimezoneMap(gtk.Widget):
             c.append(ord(pixels[(rowstride * y + x * 4)+3]))
             for offset in color_codes:
                 if color_codes[offset] == c:
-                    o = offset
-                    break
+                    return offset
         except IndexError:
             print 'Mouse click outside of the map.'
+        return None
+
+    def button_press(self, unused_widget, event):
+        x = int(event.x)
+        y = int(event.y)
+
+        o = self.convert_xy_to_offset(x, y)
         if not o:
             return
-        
+
         self.selected_offset = o
 
-        # FIXME: Why do the first two clicks show the same city?
         if (x, y) == self.previous_click and self.distances:
-            zone = self.distances[self.dist_pos][1].zone
             self.dist_pos = (self.dist_pos + 1) % len(self.distances)
+            zone = self.distances[self.dist_pos][1].zone
         else:
             self.distances = []
             height = self.background.get_height()
             width = self.background.get_width()
+            has_context = self.selected_offset.count('|') > 0
             for loc in self.tzdb.locations:
                 offset = (loc.raw_utc_offset.days * 24) + \
                     (loc.raw_utc_offset.seconds / 60.0 / 60.0)
-                if str(offset) != self.selected_offset:
+                if str(offset) != self.selected_offset.split('|')[0]:
                     continue
                 pointx = convert_longitude_to_x(loc.longitude, width)
                 pointy = convert_latitude_to_y(loc.latitude, height)
+                if has_context:
+                    pointo = self.convert_xy_to_offset(pointx, pointy)
+                    same_context = pointo == o
+                else:
+                    same_context = True
                 dx = pointx - x
                 dy = pointy - y
                 dist = dx * dx + dy * dy
-                self.distances.append((dist, loc))
+                self.distances.append((dist, loc, same_context))
             self.distances.sort()
+            # If this zone takes context into consideration (like
+            # distinguishing sides of MX/US border), then move the
+            # nearest city in the same context to the front.  We
+            # only do this for the first city (i.e. the first click).
+            for i in range(len(self.distances)):
+                if self.distances[i][2]:
+                    if i > 0:
+                        self.distances.insert(0, self.distances.pop(i))
+                    break
             # Disable for now.  As there are only a handful of cities in each
             # time zone band, it seemingly makes sense to cycle through all of
             # them.

@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8; Mode: Python; indent-tabs-mode: nil; tab-width: 4 -*-
 
 # Copyright (C) 2005 Junta de Andalucía
 # Copyright (C) 2005, 2006, 2007, 2008 Canonical Ltd.
@@ -22,13 +22,59 @@
 import sys
 import os
 import syslog
-import subprocess
 
 import debconf
 from ubiquity.debconfcommunicator import DebconfCommunicator
-from ubiquity.misc import drop_privileges
-
+from ubiquity.misc import drop_privileges, execute_root
+from ubiquity.components import install
 from ubiquity import i18n
+from ubiquity import plugin_manager
+
+# Lots of intentionally unused arguments here (abstract methods).
+__pychecker__ = 'no-argsused'
+
+class Controller:
+    def __init__(self, wizard):
+        self._wizard = wizard
+        self.dbfilter = None
+        self.oem_config = wizard.oem_config
+        self.oem_user_config = wizard.oem_user_config
+
+        # For summary and install.
+        self.get_grub = wizard.get_grub
+        self.set_grub = wizard.set_grub
+        self.get_summary_device = wizard.get_summary_device
+        self.set_summary_device = wizard.set_summary_device
+        self.get_popcon = wizard.get_popcon
+        self.set_popcon = wizard.set_popcon
+        self.set_proxy_host = wizard.set_proxy_host
+        self.set_proxy_port = wizard.set_proxy_port
+        self.get_proxy = wizard.get_proxy
+
+    def translate(self, lang=None, just_me=True, not_me=False, reget=False):
+        pass
+    def allow_go_forward(self, allowed):
+        pass
+    def allow_go_backward(self, allowed):
+        pass
+    def allow_change_step(self, allowed):
+        pass
+    def allowed_change_step(self):
+        pass
+    def go_forward(self):
+        pass
+    def go_backward(self):
+        pass
+    def toggle_top_level(self):
+        pass
+
+class Component:
+    def __init__(self):
+        self.module = None
+        self.controller = None
+        self.filter_class = None
+        self.ui_class = None
+        self.ui = None
 
 class BaseFrontend:
     """Abstract ubiquity frontend.
@@ -43,15 +89,15 @@ class BaseFrontend:
     def __init__(self, distro):
         """Frontend initialisation."""
         self.distro = distro
-        self.locale = None
+        self.db = None
         self.dbfilter = None
         self.dbfilter_status = None
-        self.current_layout = None
         self.resize_choice = None
         self.manual_choice = None
         self.summary_device = None
         self.grub_en = None
         self.popcon = None
+        self.locale = None
         self.http_proxy_host = None
         self.http_proxy_port = 8080
 
@@ -59,62 +105,68 @@ class BaseFrontend:
         # thus talk to a11y applications running as a regular user.
         drop_privileges()
 
-        # Use a single private debconf-communicate instance for several
-        # queries we need to make at startup. While this is less convenient
-        # than using debconf_operation, it's significantly faster.
-        db = self.debconf_communicator()
+        self.start_debconf()
+
+        self.oem_user_config = False
+        if 'UBIQUITY_OEM_USER_CONFIG' in os.environ:
+          self.oem_user_config = True
 
         self.oem_config = False
-        try:
-            if db.get('oem-config/enable') == 'true':
-                self.oem_config = True
-                # It seems unlikely that anyone will need
-                # migration-assistant in the OEM installation process. If it
-                # turns out that they do, just delete the following two
-                # lines.
-                if 'UBIQUITY_MIGRATION_ASSISTANT' in os.environ:
-                    del os.environ['UBIQUITY_MIGRATION_ASSISTANT']
-        except debconf.DebconfError:
-            pass
-        
-        try:
-            self.oem_id = db.get('oem-config/id')
-        except debconf.DebconfError:
-            self.oem_id = ''
-
-        if self.oem_config:
+        if not self.oem_user_config:
             try:
-                db.set('passwd/auto-login', 'true')
-                db.set('passwd/auto-login-backup', 'oem')
+                if self.db.get('oem-config/enable') == 'true':
+                    self.oem_config = True
+                    # It seems unlikely that anyone will need
+                    # migration-assistant in the OEM installation process. If it
+                    # turns out that they do, just delete the following two
+                    # lines.
+                    if 'UBIQUITY_MIGRATION_ASSISTANT' in os.environ:
+                        del os.environ['UBIQUITY_MIGRATION_ASSISTANT']
             except debconf.DebconfError:
                 pass
+
+            if self.oem_config:
+                try:
+                    self.db.set('passwd/auto-login', 'true')
+                    self.db.set('passwd/auto-login-backup', 'oem')
+                except debconf.DebconfError:
+                    pass
 
         # set commands
         # Note that this will never work if the database is locked, so you
         # cannot trap that particular error using failure_command.
-        self.automation_error_cmd = None
-        self.error_cmd = None
-        self.success_cmd = None
+        self.automation_error_cmd = ''
+        self.error_cmd = ''
+        self.success_cmd = ''
         try:
-            self.automation_error_cmd = db.get(
+            self.automation_error_cmd = self.db.get(
                 'ubiquity/automation_failure_command')
-            self.error_cmd = db.get('ubiquity/failure_command')
-            self.success_cmd = db.get('ubiquity/success_command')
+            self.error_cmd = self.db.get('ubiquity/failure_command')
+            self.success_cmd = self.db.get('ubiquity/success_command')
         except debconf.DebconfError:
             pass
 
-        self.allow_password_empty = False
-        try:
-            self.allow_password_empty = db.get('user-setup/allow-password-empty') == 'true'
-        except debconf.DebconfError:
-            pass
+        # Load plugins
+        plugins = plugin_manager.load_plugins()
+        modules = plugin_manager.order_plugins(plugins)
+        self.modules = []
+        for mod in modules:
+            if mod.NAME == 'migrationassistant' and \
+                'UBIQUITY_MIGRATION_ASSISTANT' not in os.environ:
+                    continue
+            comp = Component()
+            comp.module = mod
+            if hasattr(mod, 'Page'):
+                comp.filter_class = mod.Page
+            self.modules.append(comp)
+
+        if not self.modules:
+            raise ValueError, 'No valid steps.'
 
         if 'SUDO_USER' in os.environ:
             os.environ['SCIM_USER'] = os.environ['SUDO_USER']
             os.environ['SCIM_HOME'] = os.path.expanduser(
                 '~%s' % os.environ['SUDO_USER'])
-
-        db.shutdown()
 
     def _abstract(self, method):
         raise NotImplementedError("%s.%s does not implement %s" %
@@ -125,11 +177,13 @@ class BaseFrontend:
         """Main entry point."""
         self._abstract('run')
 
-    def get_string(self, name, lang=None):
+    def get_string(self, name, lang=None, prefix=None):
         """Get the string name in the given lang or a default."""
         if lang is None:
             lang = self.locale
-        return i18n.get_string(name, lang)
+        if lang is None and 'LANG' in os.environ:
+            lang = os.environ['LANG']
+        return i18n.get_string(name, lang, prefix)
 
     def watch_debconf_fd(self, from_debconf, process_input):
         """Event loop interface to debconffilter.
@@ -154,7 +208,7 @@ class BaseFrontend:
             name = 'None'
             self.dbfilter_status = None
         else:
-            name = dbfilter.__class__.__name__
+            name = dbfilter.__module__
             if dbfilter.status:
                 self.dbfilter_status = (name, dbfilter.status)
             else:
@@ -162,7 +216,7 @@ class BaseFrontend:
         if self.dbfilter is None:
             currentname = 'None'
         else:
-            currentname = self.dbfilter.__class__.__name__
+            currentname = self.dbfilter.__module__
         syslog.syslog(syslog.LOG_DEBUG,
                       "debconffilter_done: %s (current: %s)" %
                       (name, currentname))
@@ -187,7 +241,7 @@ class BaseFrontend:
     def post_mortem(self, exctype, excvalue, exctb):
         """Drop into the debugger if possible."""
         self.run_error_cmd()
-        
+
         # Did the user request this?
         if 'UBIQUITY_DEBUG_PDB' not in os.environ:
             return
@@ -205,7 +259,7 @@ class BaseFrontend:
         import pdb
         pdb.post_mortem(exctb)
         sys.exit(1)
-    
+
     def set_page(self, page):
         """A question has been asked.  Set the interface to the appropriate
         page given the component, page."""
@@ -214,17 +268,25 @@ class BaseFrontend:
     # Debconf interaction. We cannot talk to debconf normally here, as
     # running a normal frontend would interfere with pretending to be a
     # frontend for components, but we can start up a debconf-communicate
-    # instance on demand for single queries.
+    # instance on demand.
 
     def debconf_communicator(self):
         return DebconfCommunicator('ubiquity', cloexec=True)
 
+    def start_debconf(self):
+        """Start debconf-communicator if it isn't already running."""
+        if self.db is None:
+            self.db = self.debconf_communicator()
+
+    def stop_debconf(self):
+        """Stop debconf-communicator if it's running."""
+        if self.db is not None:
+            self.db.shutdown()
+            self.db = None
+
     def debconf_operation(self, command, *params):
-        db = self.debconf_communicator()
-        try:
-            return getattr(db, command)(*params)
-        finally:
-            db.shutdown()
+        self.start_debconf()
+        return getattr(self.db, command)(*params)
 
     # Progress bar handling.
 
@@ -260,178 +322,7 @@ class BaseFrontend:
     # Interfaces with various components. If a given component is not used
     # then its abstract methods may safely be left unimplemented.
 
-    # ubiquity.components.language
-
-    def set_language_choices(self, choices, choice_map):
-        """Called with language choices and a map to localised names."""
-        self.language_choice_map = dict(choice_map)
-
-    def set_language(self, language):
-        """Set the current selected language."""
-        pass
-
-    def get_language(self):
-        """Get the current selected language."""
-        self._abstract('get_language')
-
-    def get_oem_id(self):
-        """Get a unique identifier for this batch of installations."""
-        return self.oem_id
-
-    # ubiquity.components.timezone
-
-    def set_timezone(self, timezone):
-        """Set the current selected timezone."""
-        pass
-
-    def get_timezone(self):
-        """Get the current selected timezone."""
-        self._abstract('get_timezone')
-
-    # ubiquity.components.console_setup
-
-    def set_keyboard_choices(self, choices):
-        """Set the available keyboard layout choices."""
-        pass
-
-    def set_keyboard(self, layout):
-        """Set the current keyboard layout."""
-        self.current_layout = layout
-
-    def get_keyboard(self):
-        """Get the current keyboard layout."""
-        self._abstract('get_keyboard')
-
-    def set_keyboard_variant_choices(self, choices):
-        """Set the available keyboard variant choices."""
-        pass
-
-    def set_keyboard_variant(self, variant):
-        """Set the current keyboard variant."""
-        pass
-
-    def get_keyboard_variant(self):
-        self._abstract('get_keyboard_variant')
-
-    # ubiquity.components.partman
-
-    def set_disk_layout(self, layout):
-        pass
-
-    def set_autopartition_choices(self, choices, extra_options,
-                                  resize_choice, manual_choice,
-                                  biggest_free_choice):
-        """Set available autopartitioning choices."""
-        self.resize_choice = resize_choice
-        self.manual_choice = manual_choice
-        self.biggest_free_choice = biggest_free_choice
-
-    def get_autopartition_choice(self):
-        """Get the selected autopartitioning choice."""
-        self._abstract('get_autopartition_choice')
-
-    def installation_medium_mounted(self, message):
-        """Note that the installation medium is mounted."""
-        # not flagged as abstract because some frontends may not be able to
-        # present this sensibly, for example if they only implement
-        # autopartitioning
-        pass
-
-    def update_partman(self, disk_cache, partition_cache, cache_order):
-        """Update the manual partitioner display."""
-        # not flagged as abstract because some frontends may only implement
-        # autopartitioning
-        pass
-
-    # ubiquity.components.partman_commit
-
-    def return_to_partitioning(self):
-        """Return to partitioning following a commit error."""
-        self._abstract('return_to_partitioning')
-
-    # ubiquity.components.migrationassistant
-
-    def ma_set_choices(self, choices):
-        """Set the available migration-assistant choices."""
-        pass
-
-    def ma_get_choices(self):
-        """Get the selected migration-assistant choices."""
-        self._abstract('ma_get_choices')
-
-    def ma_user_error(self, error, user):
-        """The selected migration-assistant username was bad."""
-        self._abstract('ma_user_error')
-
-    def ma_password_error(self, error, user):
-        """The selected migration-assistant password was bad."""
-        self._abstract('ma_password_error')
-
-    # ubiquity.components.usersetup
-
-    def set_fullname(self, value):
-        """Set the user's full name."""
-        pass
-
-    def get_fullname(self):
-        """Get the user's full name."""
-        self._abstract('get_fullname')
-
-    def set_username(self, value):
-        """Set the user's Unix user name."""
-        pass
-
-    def get_username(self):
-        """Get the user's Unix user name."""
-        self._abstract('get_username')
-
-    def get_password(self):
-        """Get the user's password."""
-        self._abstract('get_password')
-
-    def get_verified_password(self):
-        """Get the user's password confirmation."""
-        self._abstract('get_password')
-
-    def select_password(self):
-        """Select the text in the first password entry widget."""
-        self._abstract('select_password')
-
-    def set_auto_login(self, value):
-        """Set whether the user should be automatically logged in."""
-        self._abstract('set_auto_login')
-
-    def get_auto_login(self):
-        """Returns true if the user should be automatically logged in."""
-        self._abstract('get_auto_login')
-
-    def set_encrypt_home(self, value):
-        """Set whether the home directory should be encrypted."""
-        self._abstract('set_encrypt_home')
-
-    def get_encrypt_home(self):
-        """Returns true if the home directory should be encrypted."""
-        self._abstract('get_encrypt_home')
-
-    def username_error(self, msg):
-        """The selected username was bad."""
-        self._abstract('username_error')
-
-    def password_error(self, msg):
-        """The selected password was bad."""
-        self._abstract('password_error')
-
-    # typically part of the usersetup UI but actually called from
-    # ubiquity.components.install
-    def get_hostname(self):
-        """Get the selected hostname."""
-        self._abstract('get_hostname')
-
     # ubiquity.components.summary
-
-    def set_summary_text(self, text):
-        """Set text to be displayed in the installation summary."""
-        pass
 
     def set_summary_device(self, device):
         """Set the GRUB device. A hack until we have something better."""
@@ -446,10 +337,12 @@ class BaseFrontend:
         """Returns whether we will be installing GRUB."""
         return self.grub_en
 
-    # called from ubiquity.components.install
     def get_summary_device(self):
         """Get the selected GRUB device."""
         return self.summary_device
+
+    def get_popcon(self):
+        return self.popcon
 
     def set_popcon(self, participate):
         """Set whether to participate in popularity-contest."""
@@ -491,11 +384,6 @@ class BaseFrontend:
         else:
             return True
 
-    # called from ubiquity.components.install
-    def get_popcon(self):
-        """Get whether to participate in popularity-contest."""
-        return self.popcon
-
     # General facilities for components.
 
     def error_dialog(self, title, msg, fatal=True):
@@ -505,15 +393,38 @@ class BaseFrontend:
     def question_dialog(self, title, msg, options, use_templates=True):
         """Ask a question."""
         self._abstract('question_dialog')
-    
+
     def run_automation_error_cmd(self):
         if self.automation_error_cmd != '':
-            subprocess.call(['sh', '-c', self.automation_error_cmd])
+            execute_root('sh', '-c', self.automation_error_cmd)
 
     def run_error_cmd(self):
         if self.error_cmd != '':
-            subprocess.call(['sh', '-c', self.error_cmd])
-    
+            execute_root('sh', '-c', self.error_cmd)
+
     def run_success_cmd(self):
         if self.success_cmd != '':
-            subprocess.call(['sh', '-c', self.success_cmd])
+            self.debconf_progress_info(
+                self.get_string('ubiquity/install/success_command'))
+            execute_root('sh', '-c', self.success_cmd)
+
+    def slideshow_get_available_locale(self, slideshow_dir, locale):
+        # Returns the ideal locale for the given slideshow, based on the
+        # given locale, or 'c' if an ideal one is not available.
+        # For example, with locale=en_CA, this returns en if en_CA is not
+        # available. If en is not available this would return c.
+
+        slides_dir = '%s/slides' % slideshow_dir
+        locale_choice = 'c'
+
+        if os.path.exists('%s/loc.%s' % (slides_dir, locale)):
+            locale_choice = locale
+        else:
+            ll_cc = locale.split('.')[0]
+            ll = ll_cc.split('_')[0]
+            if os.path.exists('%s/loc.%s' % (slides_dir, ll_cc)):
+                locale_choice = ll_cc
+            elif os.path.exists('%s/loc.%s' % (slides_dir, ll)):
+                locale_choice = ll
+
+        return locale_choice

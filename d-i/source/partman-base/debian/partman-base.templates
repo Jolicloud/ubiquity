@@ -59,6 +59,7 @@ Choices-C: ${CHOICES}
 Choices: ${DESCRIPTIONS}
 # :sl1:
 _Description: This is an overview of your currently configured partitions and mount points. Select a partition to modify its settings (file system, mount point, etc.), a free space to create partitions, or a device to initialize its partition table.
+Help: partman-target/help
 
 Template: partman/confirm_nochanges
 Type: boolean
@@ -81,6 +82,17 @@ _Description: Write the changes to disks?
  .
  WARNING: This will destroy all data on any partitions you have
  removed as well as on the partitions that are going to be formatted.
+ .
+ ${ITEMS}
+
+Template: partman/confirm_nooverwrite
+Type: boolean
+Default: false
+# :sl1:
+#flag:translate!:3
+_Description: Write the changes to disks?
+ If you continue, the changes listed below will be written to the disks.
+ Otherwise, you will be able to make further changes manually.
  .
  ${ITEMS}
 
@@ -113,6 +125,7 @@ Choices-C: ${CHOICES}
 Choices: ${DESCRIPTIONS}
 # :sl2:
 _Description: What to do with this device:
+Help: partman-target/help
 
 Template: partman/free_space
 Type: select
@@ -120,6 +133,7 @@ Choices-C: ${CHOICES}
 Choices: ${DESCRIPTIONS}
 # :sl2:
 _Description: How to use this free space:
+Help: partman-target/help
 
 Template: partman/active_partition
 Type: select
@@ -128,6 +142,7 @@ Choices: ${DESCRIPTIONS}
 # :sl2:
 _Description: Partition settings:
  You are editing partition #${PARTITION} of ${DEVICE}. ${OTHERINFO} ${DESTROYED}
+Help: partman-target/help
 
 Template: partman/text/there_is_detected
 Type: text
@@ -243,6 +258,18 @@ Type: text
 # :sl1:
 _Description: #%s
 
+Template: partman/text/ata_disk
+Type: text
+# For example ATA1 (ad0)
+# :sl1:
+_Description: ATA%s (%s)
+
+Template: partman/text/ata_partition
+Type: text
+# For example ATA1, partition #5 (ad0s5)
+# :sl1:
+_Description: ATA%s, partition #%s (%s)
+
 Template: partman/text/ide_master_disk
 Type: text
 # For example IDE0 master (hda)
@@ -276,6 +303,16 @@ Template: partman/text/scsi_partition
 Type: text
 # :sl1:
 _Description: SCSI%s (%s,%s,%s), partition #%s (%s)
+
+Template: partman/text/scsi_simple_disk
+Type: text
+# :sl1:
+_Description: SCSI%s (%s)
+
+Template: partman/text/scsi_simple_partition
+Type: text
+# :sl1:
+_Description: SCSI%s, partition #%s (%s)
 
 Template: partman/text/mmc_disk
 Type: text
@@ -411,3 +448,24 @@ _Description: Installation medium on ${PARTITION}
  Your installation medium is on ${PARTITION}. You will not be able to
  create, delete, or resize partitions on this disk, but you may be able to
  install to existing partitions there.
+
+Template: partman/alignment
+Type: select
+Choices: cylinder, minimal, optimal
+Default: optimal
+Description: for internal use; can be preseeded
+ Adjust the policy for starting and ending alignment of new partitions.  You
+ can generally leave this alone unless optimal alignment causes some kind of
+ problem.
+ .
+ Cylinder alignment was required by very old DOS-era systems, and is not
+ usually needed nowadays.  However, a few buggy BIOSes may try to calculate
+ cylinder/head/sector addresses for partitions and get confused if
+ partitions aren't cylinder-aligned.
+ .
+ Minimal alignment ensures that new partitions are aligned to physical
+ blocks on the disk, avoiding performance degradation that may occur with
+ cylinder alignment particularly on modern disks.
+ .
+ Optimal alignment ensures that new partitions are aligned to a suitable
+ multiple of the physical block size, guaranteeing optimal performance.

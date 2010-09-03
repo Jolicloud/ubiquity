@@ -183,17 +183,6 @@ get_manual_hw_info() {
 	fi
 	get_rtc_info
 
-	# on some hppa systems, nic and scsi won't be found because they're
-	# not on a bus that udev understands ... 
-	if [ "`udpkg --print-architecture`" = hppa ]; then
-		echo "lasi_82596:LASI Ethernet"
-		register-module lasi_82596
-		echo "lasi700:LASI SCSI"
-		register-module -i lasi700
-		echo "zalon7xx:Zalon SCSI"
-		register-module -i zalon7xx
-	fi
-
 	case $SUBARCH in
 		powerpc/ps3)
 			echo "ps3rom:PS3 internal CD-ROM drive"
@@ -448,33 +437,20 @@ apply_pcmcia_resource_opts() {
 }
 
 # get pcmcia running if possible
-PCMCIA_INIT=
-if [ -x /etc/init.d/pcmciautils ]; then
-	PCMCIA_INIT=/etc/init.d/pcmciautils
-fi
-if [ "$PCMCIA_INIT" ]; then
+PCMCIA_INIT=/etc/init.d/pcmciautils
+if [ -x "$PCMCIA_INIT" ]; then
 	if is_not_loaded pcmcia_core; then
-		db_input medium hw-detect/start_pcmcia || true
-
-		# GTK frontend: include question about resources in dialog
-		if [ "$DEBIAN_FRONTEND" = "gtk" ]; then
-			db_input low hw-detect/pcmcia_resources || true
-		fi
+		db_input low hw-detect/pcmcia_resources || true
 		db_go || true
 
-		# Other frontends: only ask about resources if PCMCIA was selected
-		if [ "$DEBIAN_FRONTEND" != "gtk" ]; then
-			db_get hw-detect/start_pcmcia || true
-			if [ "$RET" = true ]; then
-				db_input low hw-detect/pcmcia_resources || true
-				db_go || true
-			fi
-		fi
 		if db_get hw-detect/pcmcia_resources && [ "$RET" ]; then
 			apply_pcmcia_resource_opts $RET
 		fi
-	fi
-	if db_get hw-detect/start_pcmcia && [ "$RET" = true ]; then
+		# cdebconf doesn't set seen flags, so this would normally be
+		# asked again on subsequent hw-detect runs, which is
+		# annoying.
+		db_fset hw-detect/pcmcia_resources seen true || true
+
 		db_progress INFO hw-detect/pcmcia_step
 		$PCMCIA_INIT start 2>&1 | log
 		db_progress STEP $OTHER_STEPSIZE
@@ -495,24 +471,23 @@ cardbus_check_netdev()
 {
 	local socket="$1"
 	local netdev="$2"
-	if [ -L $netdev/device ] && \
-		[ -d $socket/device/$(basename $(readlink $netdev/device)) ]; then
-		echo $(basename $netdev) >> /etc/network/devhotplug
+	if [ -L "$netdev/device" ] && \
+		[ -d "$socket/device/$(basename "$(readlink "$netdev/device")")" ]; then
+		echo "$(basename "$netdev")" >> /etc/network/devhotplug
 	fi
 }
-if ls /sys/class/pcmcia_socket/* >/dev/null 2>&1; then
-	for socket in /sys/class/pcmcia_socket/*; do
-		for netdev in /sys/class/net/*; do
-			cardbus_check_netdev $socket $netdev
-		done
-	done
-fi
 
 # Try to do this only once..
 if [ "$have_pcmcia" -eq 1 ] && \
    ! grep -q pcmciautils /var/lib/apt-install/queue 2>/dev/null; then
 	log "Detected PCMCIA, installing pcmciautils."
 	apt-install pcmciautils || true
+
+	for socket in /sys/class/pcmcia_socket/*; do
+		for netdev in /sys/class/net/*; do
+			cardbus_check_netdev "$socket" "$netdev"
+		done
+	done
 
 	if db_get hw-detect/pcmcia_resources && [ -n "$RET" ]; then
 		echo "mkdir /target/etc/pcmcia 2>/dev/null || true" \
@@ -525,36 +500,15 @@ fi
 # Install udev into target
 apt-install udev || true
 
-# TODO: should this really be conditional on hotplug support?
-if [ -f /proc/sys/kernel/hotplug ]; then
+# Install usbutils
+if [ -d /sys/bus/usb ]; then
 	apt-install usbutils || true
-fi
-
-# Install acpi
-if [ -d /proc/acpi ]; then
-	apt-install acpi || true
-	apt-install acpid || true
-	apt-install acpi-support-base || true
 fi
 
 # If hardware has support for pmu, install pbbuttonsd
 if [ -d /sys/class/misc/pmu/ ]; then
 	apt-install pbbuttonsd || true
 fi
-
-# Install mouseemu on systems likely to have single-button mice
-case $SUBARCH in
-	i386/mac|amd64/mac)
-		apt-install mouseemu || true
-	;;
-	powerpc/powermac_*)
-		# mouseemu causes an oops somewhere in the input layer on
-		# powerpc64 at the moment, so don't install it.
-		if [ ! -d /proc/ppc64 ]; then
-			apt-install mouseemu || true
-		fi
-	;;
-esac
 
 # Install eject?
 if [ -n "$(list-devices cd; list-devices maybe-usb-floppy)" ]; then
@@ -563,11 +517,6 @@ fi
 
 # Install optimised libc based on CPU type
 case "$(udpkg --print-architecture)" in
-    armel)
-	if grep -qw '^Features.* vfp' /proc/cpuinfo; then
-		apt-install libc6-vfp || true
-	fi
-	;;
     i386)
 	case "$(grep '^cpu family' /proc/cpuinfo | head -n1 | cut -d: -f2)" in
 	    " 6"|" 15")

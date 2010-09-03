@@ -50,6 +50,7 @@ clean:
 			(cd "$$dir" && debian/rules clean) || exit 1; \
 		fi; \
 	done
+	$(MAKE) -C $(SOURCEDIR)/console-setup/Keyboard clean
 	rm -f $(SOURCEDIR)/*.deb $(SOURCEDIR)/*.udeb
 	rm -f manifest.old
 	rm -rf udeb-control templates
@@ -71,8 +72,10 @@ install:
 			dpkg-deb -e "$$udeb" "udeb-control/$$name"; \
 			if [ -f "udeb-control/$$name/templates" ]; then \
 				sed -n '/./,$$p' "udeb-control/$$name/templates" | \
-					grep -iv '^indices.*:' >> templates; \
-				echo >> templates; \
+					egrep -iv '^(indices.*|help):' >> templates; \
+				if [ "$$(tail -n1 templates)" ]; then \
+					echo >> templates; \
+				fi; \
 			fi; \
 		fi; \
 	done

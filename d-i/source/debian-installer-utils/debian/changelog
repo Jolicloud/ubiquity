@@ -1,3 +1,233 @@
+debian-installer-utils (1.72ubuntu5) lucid; urgency=low
+
+  * Backport from trunk:
+    - list-devices: Consider virtio devices as disks (LP: #568143).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 23 Apr 2010 00:07:00 +0100
+
+debian-installer-utils (1.72ubuntu4) lucid; urgency=low
+
+  * user-params: Skip *-ubiquity and noninteractive command line options,
+    only used on the live CD.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Fri, 12 Feb 2010 16:04:35 +0000
+
+debian-installer-utils (1.72ubuntu3) lucid; urgency=low
+
+  * Backport from trunk:
+    - list-devices: Don't fall over if dmraid fails (thanks, Joel Ebel;
+      LP: #514595).
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Thu, 04 Feb 2010 11:27:40 -0800
+
+debian-installer-utils (1.72ubuntu2) lucid; urgency=low
+
+  * Backport from trunk:
+    - list-devices: Add support for dmraid disks and partitions.  Exclude
+      disks and partitions that are already part of a dmraid set.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 27 Jan 2010 16:42:07 +0000
+
+debian-installer-utils (1.72ubuntu1) lucid; urgency=low
+
+  * Resynchronise with Debian. Remaining changes:
+    - user-params: Don't propagate vga=* or break=* to installed system.
+    - Use /proc/self/fd/4 rather than /dev/fd/4 in fetch-url-methods/http;
+      the latter doesn't seem to exist in d-i.
+    - list-devices: new "mmc-partition" type for detecting partitions on MMC
+      devices.
+    - Don't include the battery subsystem on calls to udevadm trigger.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Sun, 15 Nov 2009 17:38:02 -0600
+
+debian-installer-utils (1.72) unstable; urgency=low
+
+  [ Colin Watson ]
+  * Upgrade to debhelper v7.
+  * Add a dummy initctl similar to the dummy start-stop-daemon, so that
+    attempts to control Upstart jobs (if Upstart is in use) won't do
+    anything.
+
+  [ Aurelien Jarno ]
+  * Also ship other terminfo on GNU/kFreeBSD, they are also used in some
+    cases (e.g. installation through ssh).
+
+  [ Chris Lamb ]
+  * Add "usb-partition" argument to list-devices for detecting partitions on
+    USB drives. Patch originally by Tormod Volden <debian.tormod@gmail.com>.
+    Option is to be used for creating Debian Live USB sticks.
+
+  [ Frans Pop ]
+  * apt-install: no longer disable Recommends; it is now a global setting.
+  * register-module: stop calling the obsolete update-modules.
+
+  [ Ryan Niebur ]
+  * add support for tftp to fetch-url for preseeding (Closes: 509723)
+
+  [ Frans Pop ]
+  * Remove no longer needed Lintian override for missing Standards-
+    Version field.
+
+  [ Updated translations ]
+  * Amharic (am.po) by Tegegne Tefera
+  * Arabic (ar.po) by Ossama M. Khayat
+  * Asturian (ast.po) by Marcos Antonio Alvarez Costales
+  * Czech (cs.po) by Miroslav Kure
+  * Danish (da.po) by Ask Hjorth Larsen
+  * Estonian (et.po) by Mattias Põldaru
+  * Finnish (fi.po) by Esko Arajärvi
+  * Hindi (hi.po)
+  * Italian (it.po) by Milo Casagrande
+  * Japanese (ja.po) by Kenshi Muto
+  * Korean (ko.po) by Changwoo Ryu
+  * Lithuanian (lt.po) by Kęstutis Biliūnas
+  * Dutch (nl.po) by Frans Pop
+  * Slovak (sk.po) by Ivan Masár
+  * Swedish (sv.po) by Daniel Nylander
+  * Thai (th.po) by Theppitak Karoonboonyanan
+  * Vietnamese (vi.po) by Clytie Siddall
+
+ -- Colin Watson <cjwatson@debian.org>  Sun, 15 Nov 2009 23:27:59 +0000
+
+debian-installer-utils (1.71ubuntu1) lucid; urgency=low
+
+  * Resynchronise with Debian. Remaining changes:
+    - user-params: Don't propagate vga=* or break=* to installed system.
+    - Use /proc/self/fd/4 rather than /dev/fd/4 in fetch-url-methods/http;
+      the latter doesn't seem to exist in d-i.
+    - list-devices: new "usb-partition" type for detecting partitions on USB
+      drives; new "mmc-partition" type for detecting partitions on MMC
+      devices.
+    - Don't include the battery subsystem on calls to udevadm trigger.
+
+ -- Steve Langasek <steve.langasek@ubuntu.com>  Thu, 12 Nov 2009 03:21:30 -0800
+
+debian-installer-utils (1.71) unstable; urgency=low
+
+  [ Luca Favatella ]
+  * Add 'cons25' terminfo file (used by kfreebsd-i386).
+  * Make di-utils-terminfo Architecture: any to avoid size increase.
+
+ -- Colin Watson <cjwatson@debian.org>  Sat, 18 Jul 2009 20:58:07 +0200
+
+debian-installer-utils (1.70ubuntu2) karmic; urgency=low
+
+  * list-devices: also allow platform-mxsdhci and platform-orion-ehci as
+    ID_PATH for mmc devices.
+
+ -- Loïc Minier <loic.minier@ubuntu.com>  Tue, 06 Oct 2009 23:03:39 +0100
+
+debian-installer-utils (1.70ubuntu1) karmic; urgency=low
+
+  * Resynchronise with Debian. Remaining changes:
+    - user-params: Don't propagate vga=* or break=* to installed system.
+    - Use /proc/self/fd/4 rather than /dev/fd/4 in fetch-url-methods/http;
+      the latter doesn't seem to exist in d-i.
+    - list-devices: new "usb-partition" type for detecting partitions on USB
+      drives; new "mmc-partition" type for detecting partitions on MMC
+      devices.
+    - Don't include the battery subsystem on calls to udevadm trigger.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Tue, 07 Jul 2009 12:52:08 +0100
+
+debian-installer-utils (1.70) unstable; urgency=low
+
+  [ Otavio Salvador ]
+  * di-utils-exit-installer: change template description to make it generic.
+
+  [ Colin Watson ]
+  * Change in-target and apt-install to pass through non-zero exit codes
+    unmolested rather than collapsing them to 1. In particular, this allows
+    cancellation exit codes from debconf-apt-progress to be detected by
+    apt-setup (see
+    http://lists.debian.org/debian-boot/2008/01/msg00094.html).
+
+ -- Colin Watson <cjwatson@debian.org>  Fri, 03 Jul 2009 14:26:17 +0100
+
+debian-installer-utils (1.69ubuntu1) karmic; urgency=low
+
+  * Resynchronise with Debian. Remaining changes:
+    - user-params: Don't propagate vga=* or break=* to installed system.
+    - Use /proc/self/fd/4 rather than /dev/fd/4 in fetch-url-methods/http;
+      the latter doesn't seem to exist in d-i.
+    - list-devices: new "usb-partition" type for detecting partitions on USB
+      drives; new "mmc-partition" type for detecting partitions on MMC
+      devices.
+    - Don't include the battery subsystem on calls to udevadm trigger.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Mon, 15 Jun 2009 17:29:47 +0100
+
+debian-installer-utils (1.69) unstable; urgency=low
+
+  * block-attr: The 'type' builtin doesn't seem to handle variable
+    assignments in quite the way I'd expected; work around this by exporting
+    PATH as a separate command in a subshell.
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 02 Jun 2009 13:02:50 +0100
+
+debian-installer-utils (1.68ubuntu1) karmic; urgency=low
+
+  * Resynchronise with Debian. Remaining changes:
+    - user-params: Don't propagate vga=* or break=* to installed system.
+    - Use /proc/self/fd/4 rather than /dev/fd/4 in fetch-url-methods/http;
+      the latter doesn't seem to exist in d-i.
+    - list-devices: new "usb-partition" type for detecting partitions on USB
+      drives; new "mmc-partition" type for detecting partitions on MMC
+      devices.
+    - Don't include the battery subsystem on calls to udevadm trigger.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Tue, 12 May 2009 14:19:48 +0100
+
+debian-installer-utils (1.68) unstable; urgency=low
+
+  [ Frans Pop ]
+  * Add 'dumb' terminfo file (used by s390; possibly useful for serial console).
+
+  [ Colin Watson ]
+  * vol_id is being merged into blkid upstream. So that we don't have to
+    keep tracking this kind of thing in several different udebs, add a
+    block-attr wrapper that tries both.
+
+  [ Updated translations ]
+  * Bengali (bn.po) by Md. Rezwan Shahid
+  * Estonian (et.po) by Mattias Põldaru
+  * Slovak (sk.po) by Ivan Masár
+
+ -- Colin Watson <cjwatson@debian.org>  Tue, 12 May 2009 11:28:15 +0100
+
+debian-installer-utils (1.67ubuntu1) karmic; urgency=low
+
+  [ Colin Watson ]
+  * Resynchronise with Debian. Remaining changes:
+    - user-params: Don't propagate vga=* or break=* to installed system.
+    - Use /proc/self/fd/4 rather than /dev/fd/4 in fetch-url-methods/http;
+      the latter doesn't seem to exist in d-i.
+    - list-devices: new "usb-partition" type for detecting partitions on USB
+      drives.
+
+  [ Evan Dandrea ]
+  * Don't include the battery subsystem on calls to udevadm trigger
+    (LP: #331883).
+
+  [ Loic Minier ]
+  * Add support for listing MMC partitions in list-devices; note that many MMC
+    devices in e.g. netbooks or screens are actually connected over USB
+    though; LP: #364604.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Wed, 29 Apr 2009 00:46:18 +0100
+
+debian-installer-utils (1.67) unstable; urgency=low
+
+  [ Frans Pop ]
+  * Remove myself as uploader.
+  * Append .conf extention to /etc/modprobe.d files, as required for
+    module-init-tools >= 3.7.
+
+  [ Updated translations ]
+  * Italian (it.po) by Milo Casagrande
+	
+ -- Otavio Salvador <otavio@debian.org>  Sun, 05 Apr 2009 17:53:18 -0300
+
 debian-installer-utils (1.66ubuntu1) jaunty; urgency=low
 
   * Resynchronise with Debian. Remaining changes:

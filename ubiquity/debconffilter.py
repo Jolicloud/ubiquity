@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8; Mode: Python; indent-tabs-mode: nil; tab-width: 4 -*-
 
 # Copyright (C) 2005, 2006, 2007, 2008 Canonical Ltd.
 # Written by Colin Watson <cjwatson@ubuntu.com>.
@@ -59,6 +59,7 @@ valid_commands = {
     'BEGINBLOCK': 0,
     'CAPB': None,
     'CLEAR': 0,
+    'DATA': 3,
     'ENDBLOCK': 0,
     'FGET': 2,
     'FSET': 3,
@@ -97,9 +98,17 @@ class DebconfFilter:
         self.toreadpos = 0
         self.towrite = ''
         self.towritepos = 0
+        self.question_type_cache = {}
+
+    def debug_enabled(self, key):
+        if key == 'filter' and os.environ.get('UBIQUITY_DEBUG_CORE') == '1':
+            return True
+        if self.debug_re is not None and self.debug_re.search(key):
+            return True
+        return False
 
     def debug(self, key, *args):
-        if self.debug_re is not None and self.debug_re.search(key):
+        if self.debug_enabled(key):
             import time
             # bizarre time formatting code per syslogd
             time_str = time.ctime()[4:19]
@@ -143,6 +152,17 @@ class DebconfFilter:
         self.subin.write('%s\n' % ret)
         self.subin.flush()
 
+    def question_type(self, question):
+        try:
+            return self.question_type_cache[question]
+        except KeyError:
+            try:
+                qtype = self.db.metaget(question, 'Type')
+            except debconf.DebconfError:
+                qtype = ''
+            self.question_type_cache[question] = qtype
+            return qtype
+
     def find_widgets(self, questions, method=None):
         found = set()
         for pattern in self.widgets.keys():
@@ -152,7 +172,7 @@ class DebconfFilter:
                     matches = False
                     if pattern.startswith('type:') and '/' in question:
                         try:
-                            qtype = self.db.metaget(question, 'Type')
+                            qtype = self.question_type(question)
                             if qtype == pattern[5:]:
                                 matches = True
                         except debconf.DebconfError:
@@ -269,7 +289,7 @@ class DebconfFilter:
                 # If it's an error template, fall back to generic error
                 # handling.
                 try:
-                    if self.db.metaget(question, 'Type') == 'error':
+                    if self.question_type(question) == 'error':
                         widget = self.widgets['ERROR']
                         self.debug('filter', 'error widget found for',
                                    question)
@@ -353,7 +373,7 @@ class DebconfFilter:
                              'progress_stop'):
                         self.debug('filter', 'widget found for',
                                    self.progress_bars[0])
-                        widget.progress_stop(self.progress_bars[0])
+                        widget.progress_stop()
                     self.progress_bars.pop()
                 elif subcommand == 'REGION' and len(params) == 3:
                     progress_region_start = int(params[1])
@@ -388,6 +408,15 @@ class DebconfFilter:
 
         if command == 'STOP':
             return True
+
+        if command == 'X_LOADTEMPLATEFILE' and len(params) >= 1:
+            # The template file we've been asked to load might actually be
+            # in the /target chroot rather than in the root filesystem. If
+            # so, rewrite the command.
+            if params[0].startswith('/'):
+                target_template = os.path.join('/target', params[0][1:])
+                if os.path.exists(target_template):
+                    params[0] = target_template
 
         try:
             if not self.escaping:

@@ -13,15 +13,16 @@
 #
 # Nishant Sharma <me@nishants.net>, 2005, 2006.
 # Kumar Appaiah <akumar@ee.iitm.ac.in>, 2008.
-# Kumar Appaiah <a.kumar@alumni.iitm.ac.in>, 2008.
+# Kumar Appaiah <a.kumar@alumni.iitm.ac.in>, 2008, 2009.
+# Kumar Appaiah <kumar.appaiah@gmail.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: debian-installer_packages_po_sublevel1_hi\n"
-"Report-Msgid-Bugs-To: grub-installer@packages.debian.org\n"
-"POT-Creation-Date: 2009-01-23 02:54+0100\n"
-"PO-Revision-Date: 2008-08-30 16:34-0500\n"
-"Last-Translator: Kumar Appaiah <a.kumar@alumni.iitm.ac.in>\n"
-"Language-Team: Hindi <debian-in-workers@lists.alioth.debian.org>\n"
+"Report-Msgid-Bugs-To: debian-boot@lists.debian.org\n"
+"POT-Creation-Date: 2010-03-26 09:46+0000\n"
+"PO-Revision-Date: 2009-07-06 22:29-0400\n"
+"Last-Translator: \n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -216,16 +217,26 @@ msgstr ""
 #. Description
 #. :sl2:
 #: ../grub-installer.templates:7001
+#, fuzzy
+#| msgid ""
+#| "The device can be specified using GRUB's \"(hdn,m)\" notation, or as a "
+#| "device in /dev. Below are some examples:\n"
+#| " - \"(hd0)\" or \"/dev/hda\" will install GRUB to the master boot record\n"
+#| "   of your first hard drive (IDE);\n"
+#| " - \"(hd0,1)\" or \"/dev/hda2\" will use the second partition of your\n"
+#| "   first IDE drive;\n"
+#| " - \"(hd2,4)\" or \"/dev/sdc5\" will use the first extended partition of\n"
+#| "   your third drive (SCSI here);\n"
+#| " - \"(fd0)\" or \"/dev/fd0\" will install GRUB to a floppy."
 msgid ""
-"The device can be specified using GRUB's \"(hdn,m)\" notation, or as a "
-"device in /dev. Below are some examples:\n"
-" - \"(hd0)\" or \"/dev/hda\" will install GRUB to the master boot record\n"
-"   of your first hard drive (IDE);\n"
-" - \"(hd0,1)\" or \"/dev/hda2\" will use the second partition of your\n"
-"   first IDE drive;\n"
-" - \"(hd2,4)\" or \"/dev/sdc5\" will use the first extended partition of\n"
-"   your third drive (SCSI here);\n"
-" - \"(fd0)\" or \"/dev/fd0\" will install GRUB to a floppy."
+"The device should be specified as a device in /dev. Below are some "
+"examples:\n"
+" - \"/dev/sda\" will install GRUB to the master boot record of your first\n"
+"   hard drive;\n"
+" - \"/dev/sda2\" will use the second partition of your first hard drive;\n"
+" - \"/dev/sdc5\" will use the first extended partition of your third hard\n"
+"   drive;\n"
+" - \"/dev/fd0\" will install GRUB to a floppy."
 msgstr ""
 "उपकरणों को ग्रब की संकेत पद्धति \"(hdn,m)\" या फिर /dev में एक उपकरण के द्वारा वर्णित "
 "किया जा सकता है. नीचे कुछ उदाहरण दिए गए हैं: \n"
@@ -412,14 +423,3 @@ msgstr "हार्ड डिस्क में ग्रब बूट लो�
 #: ../grub-installer.templates:25001
 msgid "Reinstall GRUB boot loader"
 msgstr "ग्रब बूट लोडर पुनः संस्थापित करें"
-
-#~ msgid "Install the GRUB boot loader to XFS file system?"
-#~ msgstr "ग्रब बूट लोडर को एक्स एफ एस फाइलसिस्टम पर संस्थापित करें?"
-
-#~ msgid ""
-#~ "The GRUB boot loader installation often fails or hangs when /boot is on a "
-#~ "XFS file system. Using LILO in this situation is recommended."
-#~ msgstr ""
-#~ "कई बार ग्रब बूटलोडर का संस्थापन या तो असफल हो जाता है या फिर अटक जाता है यदि /"
-#~ "boot एक एक्सएफएस फाइलतंत्र पर है तो. ऐसी स्थिति में LILO का प्रयोग करने की संस्तुति "
-#~ "का जाती है."

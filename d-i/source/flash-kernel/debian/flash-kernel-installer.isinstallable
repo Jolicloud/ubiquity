@@ -2,6 +2,9 @@
 set -e
 
 case "`archdetect`" in
+	arm*/dove)
+		exit 0
+	;;
 	arm*/imx51)
 		exit 0
 	;;
@@ -12,6 +15,9 @@ case "`archdetect`" in
 		exit 0
 	;;
 	arm*/orion5x)
+		exit 0
+	;;
+	arm*/omap)
 		exit 0
 	;;
 	# Don't activate it by default

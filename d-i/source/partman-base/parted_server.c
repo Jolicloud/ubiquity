@@ -61,6 +61,12 @@ char const program_name[] = "parted_server";
 #define log_partitions(dev, disk) \
         (dump_info(logfile, dev, disk), fflush(logfile))
 
+enum {
+        ALIGNMENT_CYLINDER,
+        ALIGNMENT_MINIMAL,
+        ALIGNMENT_OPTIMAL
+} alignment = ALIGNMENT_OPTIMAL;
+
 /**********************************************************************
    Reading from infifo and writing to outfifo
 **********************************************************************/
@@ -460,6 +466,16 @@ index_of_name(const char *name)
         return i;
 }
 
+/* Mangle fstype to abstract changes in parted code */
+void
+mangle_fstype_name(char **fstype)
+{
+        if (!strcasecmp(*fstype, "linux-swap")) {
+                free(*fstype);
+                *fstype = strdup("linux-swap(v1)");
+        }
+}
+
 /* Return the PedDevice of `name'. */
 PedDevice *
 device_named(const char *name)
@@ -552,6 +568,12 @@ set_disk_named(const char *name, PedDisk *disk)
         if (NULL != old_disk)
                 ped_disk_destroy(old_disk);
         devices[index].disk = disk;
+        if (disk) {
+                if (ped_disk_is_flag_available(disk,
+                                               PED_DISK_CYLINDER_ALIGNMENT))
+                        ped_disk_set_flag(disk, PED_DISK_CYLINDER_ALIGNMENT,
+                                          alignment == ALIGNMENT_CYLINDER);
+        }
 }
 
 /* True if the partition doesn't exist on the storage device */
@@ -617,6 +639,52 @@ has_extended_partition(PedDisk *disk)
 {
         assert(disk != NULL);
         return ped_disk_extended_partition(disk) != NULL;
+}
+
+void
+set_alignment(void)
+{
+        const char *align_env = getenv("PARTMAN_ALIGNMENT");
+
+        if (align_env && !strcmp(align_env, "cylinder"))
+                alignment = ALIGNMENT_CYLINDER;
+        else if (align_env && !strcmp(align_env, "minimal"))
+                alignment = ALIGNMENT_MINIMAL;
+        else
+                alignment = ALIGNMENT_OPTIMAL;
+}
+
+/* Get a constraint suitable for partition creation on this disk. */
+PedConstraint *
+partition_creation_constraint(const PedDevice *cdev)
+{
+        PedConstraint *aligned, *gap_at_end, *combined;
+        PedGeometry gap_at_end_geom;
+
+        if (alignment == ALIGNMENT_OPTIMAL)
+                aligned = ped_device_get_optimal_aligned_constraint(cdev);
+        else if (alignment == ALIGNMENT_MINIMAL)
+                aligned = ped_device_get_minimal_aligned_constraint(cdev);
+        else
+                aligned = ped_device_get_constraint(cdev);
+        if (cdev->type == PED_DEVICE_DM)
+                return aligned;
+
+        /* We must ensure that there's a small gap at the end, since
+         * otherwise MD 0.90 metadata at the end of a partition may confuse
+         * mdadm into believing that both the disk and the partition
+         * represent the same RAID physical volume.
+         */
+        ped_geometry_init(&gap_at_end_geom, cdev, 0, cdev->length - 1);
+        gap_at_end = ped_constraint_new(ped_alignment_any, ped_alignment_any,
+                                        &gap_at_end_geom, &gap_at_end_geom,
+                                        1, cdev->length);
+
+        combined = ped_constraint_intersect(aligned, gap_at_end);
+
+        ped_constraint_destroy(gap_at_end);
+        ped_constraint_destroy(aligned);
+        return combined;
 }
 
 /* Add to `disk' a new extended partition starting at `start' and
@@ -687,7 +755,7 @@ add_primary_partition(PedDisk *disk, PedFileSystemType *fs_type,
                 log("Cannot create new primary partition.");
                 return NULL;
         }
-        if (!ped_disk_add_partition(disk, part, ped_constraint_any(disk->dev))) {
+        if (!ped_disk_add_partition(disk, part, partition_creation_constraint(disk->dev))) {
                 log("Cannot add the primary partition to partition table.");
                 ped_partition_destroy(part);
                 return NULL;
@@ -714,7 +782,7 @@ add_logical_partition(PedDisk *disk, PedFileSystemType *fs_type,
                 minimize_extended_partition(disk);
                 return NULL;
         }
-        if (!ped_disk_add_partition(disk, part, ped_constraint_any(disk->dev))) {
+        if (!ped_disk_add_partition(disk, part, partition_creation_constraint(disk->dev))) {
                 ped_partition_destroy(part);
                 minimize_extended_partition(disk);
                 return NULL;
@@ -973,8 +1041,11 @@ partition_info(PedDisk *disk, PedPartition *part)
                 fs = "extended";
         else if (NULL == (part->fs_type))
                 fs = "unknown";
+        else if (0 == strncmp(part->fs_type->name, "linux-swap", 10))
+                fs = "linux-swap";
         else
                 fs = part->fs_type->name;
+
         if (0 == strcmp(disk->type->name, "loop")) {
                 path = strdup(disk->dev->path);
 /*         } else if (0 == strcmp(disk->type->name, "dvh")) { */
@@ -1274,6 +1345,8 @@ void
 command_partitions()
 {
         PedPartition *part;
+        PedConstraint *creation_constraint;
+        PedSector grain_size;
         scan_device_name();
         if (dev == NULL)
                 critical_error("The device %s is not opened.", device_name);
@@ -1292,6 +1365,9 @@ command_partitions()
         }
         if (has_extended_partition(disk))
                 minimize_extended_partition(disk);
+        creation_constraint = partition_creation_constraint(dev);
+        grain_size = creation_constraint->start_align->grain_size;
+        ped_constraint_destroy(creation_constraint);
         for (part = NULL;
              NULL != (part = ped_disk_next_partition(disk, part));) {
                 char *part_info;
@@ -1300,9 +1376,9 @@ command_partitions()
                 if (PED_PARTITION_METADATA & part->type)
                         continue;
                 /* Undoubtedly the following operator is a hack.
-                   Libparted tries to allign the partitions at
-                   cylinder boundaries but despite this it sometimes
-                   reports free spaces due to alligning and even
+                   Libparted tries to align the partitions at
+                   appropriate boundaries but despite this it sometimes
+                   reports free spaces due to aligning and even
                    allows creation of unaligned partitions in these
                    free spaces.  I am not sure if this is a bug or a
                    feature of libparted. */
@@ -1310,7 +1386,7 @@ command_partitions()
                     && ped_disk_type_check_feature(disk->type,
                                                    PED_DISK_TYPE_EXTENDED)
                     && ((part->geom).length
-                        < dev->bios_geom.sectors * dev->bios_geom.heads))
+                        < dev->bios_geom.sectors * grain_size))
                         continue;
                 /* Another hack :) */
                 if (0 == strcmp(disk->type->name, "dvh")
@@ -1661,7 +1737,10 @@ command_get_file_system()
                 if (fstype == NULL) {
                         oprintf("none\n");
                 } else {
-                        oprintf("%s\n", fstype->name);
+                        if (0 == strncmp(part->fs_type->name, "linux-swap", 10))
+                                oprintf("linux-swap\n");
+                        else
+                                oprintf("%s\n", fstype->name);
                 }
                 free(id);
                 activate_exception_handler();
@@ -1688,6 +1767,9 @@ command_change_file_system()
                 critical_error("Partition not found: %s", id);
         }
         free(id);
+
+        mangle_fstype_name(&s_fstype);
+
         fstype = ped_file_system_type_get(s_fstype);
         if (fstype == NULL) {
                 log("Filesystem %s not found, let's see if it is a flag",
@@ -1766,6 +1848,9 @@ command_create_file_system()
         if (part == NULL)
                 critical_error("No such partition: %s", id);
         free(id);
+
+        mangle_fstype_name(&s_fstype);
+
         fstype = ped_file_system_type_get(s_fstype);
         if (fstype == NULL)
                 critical_error("Bad file system type: %s", s_fstype);
@@ -1773,7 +1858,13 @@ command_create_file_system()
         deactivate_exception_handler();
         if ((fs = timered_file_system_create(&(part->geom), fstype)) != NULL) {
                 ped_file_system_close(fs);
-                ped_disk_commit_to_dev(disk);
+                /* If the partition is at the very start of the disk, then
+                 * we've already done all the committing we need to do, and
+                 * ped_disk_commit_to_dev will overwrite the partition
+                 * header.
+                 */
+                if (part->geom.start != 0)
+                        ped_disk_commit_to_dev(disk);
         }
         activate_exception_handler();
         free(s_fstype);
@@ -1857,6 +1948,8 @@ command_new_partition()
                 critical_error("Bad partition type: %s", s_type);
         log("requested partition with type %s", s_type);
         free(s_type);
+
+        mangle_fstype_name(&s_fs_type);
 
         fs_type = ped_file_system_type_get(s_fs_type);
         if (fs_type == NULL)
@@ -2199,6 +2292,50 @@ command_is_busy()
 }
 
 void
+command_alignment_offset()
+{
+        char *id;
+        PedPartition *part;
+        PedAlignment *align;
+        log("command_alignment_offset()");
+        scan_device_name();
+        if (dev == NULL)
+                critical_error("The device %s is not opened.", device_name);
+        open_out();
+        if (1 != iscanf("%as", &id))
+                critical_error("Expected partition id");
+        part = partition_with_id(disk, id);
+        oprintf("OK\n");
+        if (alignment == ALIGNMENT_CYLINDER)
+                /* None of this is useful when using cylinder alignment. */
+                oprintf("0\n");
+        else {
+                align = ped_device_get_minimum_alignment(dev);
+
+                /* align->offset represents the offset of the lowest logical
+                 * block on the disk from the disk's natural alignment,
+                 * modulo the physical sector size (e.g. 4096 bytes), as a
+                 * number of logical sectors (e.g. 512 bytes).  For a disk
+                 * with 4096-byte physical sectors deliberately misaligned
+                 * to make DOS-style 63-sector offsets work well, we would
+                 * thus expect align->offset to be 1, as (1 + 63) * 512 /
+                 * 4096 is an integer.
+                 *
+                 * To get the alignment offset of a *partition*, we thus
+                 * need to start with align->offset (in bytes) plus the
+                 * partition start position.
+                 */
+                oprintf("%lld\n",
+                        ((align->offset + part->geom.start) *
+                         dev->sector_size) %
+                        dev->phys_sector_size);
+
+                ped_alignment_destroy(align);
+        }
+        free(id);
+}
+
+void
 make_fifo(char* name)
 {
     int status;
@@ -2293,12 +2430,14 @@ main_loop()
 {
         char *str;
         int iteration = 1;
+        set_alignment();
         while (1) {
                 log("main_loop: iteration %i", iteration++);
                 open_in();
                 if (1 != iscanf("%as", &str))
                         critical_error("No data in infifo.");
                 log("Read command: %s", str);
+                /* Keep partman-command in sync with changes here. */
                 if (!strcasecmp(str, "QUIT"))
                         command_quit();
                 else if (!strcasecmp(str, "OPEN"))
@@ -2372,6 +2511,8 @@ main_loop()
                         command_get_label_type();
                 else if (!strcasecmp(str, "IS_BUSY"))
                         command_is_busy();
+                else if (!strcasecmp(str, "ALIGNMENT_OFFSET"))
+                        command_alignment_offset();
                 else
                         critical_error("Unknown command %s", str);
                 free(str);

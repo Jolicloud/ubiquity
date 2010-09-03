@@ -14,8 +14,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
-"Report-Msgid-Bugs-To: debian-boot@lists.debian.org\n"
-"POT-Creation-Date: 2008-07-23 22:50+0000\n"
+"Report-Msgid-Bugs-To: hw-detect@packages.debian.org\n"
+"POT-Creation-Date: 2009-07-21 22:48+0000\n"
 "PO-Revision-Date: 2008-09-10 21:17+0200\n"
 "Last-Translator: Håvard Korsvoll\n"
 "Language-Team: Norwegian Nynorsk <i18n-no@lister.ping.uio.no>\n"
@@ -168,6 +168,28 @@ msgstr "Fann ingen partisjonerbare media."
 msgid "Please check that a hard disk is attached to this machine."
 msgstr "Sjå etter at det er kobla til ein harddisk til denne maskina."
 
+#. Type: boolean
+#. Description
+#: ../disk-detect.templates:7001
+msgid "Activate Serial ATA RAID devices?"
+msgstr "Aktivera serielle ATA RAID einingar?"
+
+#. Type: boolean
+#. Description
+#: ../disk-detect.templates:7001
+msgid ""
+"One or more drives containing Serial ATA RAID configurations have been "
+"found. Do you wish to activate these RAID devices?"
+msgstr ""
+"Ein eller fleire stasjonar med seriell ATA RAID konfigurasjon er funnen. "
+"Ønskjer du å aktivera RAID for desse?"
+
+#. Type: text
+#. Description
+#: ../disk-detect.templates:8001
+msgid "login to iSCSI targets"
+msgstr "Logg på iSCSI-mål"
+
 #. Type: text
 #. Description
 #. :sl1:
@@ -218,6 +240,8 @@ msgstr ""
 
 #. Type: boolean
 #. Description
+#. FIXME: not in use and kept just while we're still in doubt it will
+#. be needed
 #. :sl2:
 #: ../hw-detect.templates:6001
 msgid "Start PC card services?"
@@ -225,6 +249,8 @@ msgstr "Starta tenester for PC-kort?"
 
 #. Type: boolean
 #. Description
+#. FIXME: not in use and kept just while we're still in doubt it will
+#. be needed
 #. :sl2:
 #: ../hw-detect.templates:6001
 msgid ""
@@ -254,9 +280,9 @@ msgid ""
 msgstr ""
 "Noko PCMCI-maskinvare treng særskilde val for ressursoppsett for å fungera, "
 "og kan få maskina til å låse seg elles. Til dømes treng somme bærbare frå "
-"Dell at ein skriv inn «exclude port 0x800-0x8ff» her. Desse innstillingar "
-"vil bli lagt til fila /etc/pcmcia/config.opts. Sjå installasjonsmanualen "
-"eller PCMCIA-HOWTOen for meir informasjon."
+"Dell at ein skriv inn «exclude port 0x800-0x8ff» her. Desse innstillingar vil "
+"bli lagt til fila /etc/pcmcia/config.opts. Sjå installasjonsmanualen eller "
+"PCMCIA-HOWTOen for meir informasjon."
 
 #. Type: string
 #. Description

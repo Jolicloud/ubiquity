@@ -1,4 +1,9 @@
+ARCH := $(shell dpkg-architecture -qDEB_HOST_ARCH)
+ifeq ($(ARCH),powerpc)
+CFLAGS=-Wall -O2 -D_GNU_SOURCE
+else
 CFLAGS=-Wall -Os -D_GNU_SOURCE
+endif
 LIBS=-lparted
 
 all: parted_server parted_devices partmap
@@ -14,5 +19,8 @@ partmap: partmap.c
 
 clean:
 	rm -f parted_server parted_devices partmap
+
+test:
+	cd test && ./conversions
 
 .PHONY: clean

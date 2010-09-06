@@ -13,7 +13,7 @@
       <object class="GtkVBox" id="vbox35">
         <property name="visible">True</property>
         <child>
-          <object class="GtkFrame" id="slideshow_frame">
+          <object class="GtkAlignment" id="slideshow_frame">
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>

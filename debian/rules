@@ -43,7 +43,7 @@ check:
 	find -name debian -prune -o -name \*.py -print | xargs py_compilefiles
 	find -type f \( -name \*.pyc -o -name \*.pyo \) -print0 | xargs -0r rm -f
 	# Check the syntax of any shell scripts.
-	set -e; for x in $$(find -type f -print0 | xargs -0 file -i | grep "text/x-shellscript" | cut -d':' -f1); do \
+	set -e; for x in $$(find -name .git -prune -o -type f -print0 - | xargs -0 file -i | grep "text/x-shellscript" | cut -d':' -f1); do \
 		sh -n $$x; \
 	done
 

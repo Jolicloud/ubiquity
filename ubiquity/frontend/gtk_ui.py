@@ -950,6 +950,8 @@ class Wizard(BaseFrontend):
             
             # FIXME hardcode Jolicloud color here, as the theme is bugged
             self.install_progress_window.modify_bg(gtk.STATE_NORMAL, "#333642")
+            if 'UBIQUITY_ONLY' in os.environ:
+                self.install_progress_window.set_decorated(False)
 
         else:
             self.debconf_progress_window = self.old_progress_window

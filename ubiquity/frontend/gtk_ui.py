@@ -466,6 +466,10 @@ class Wizard(BaseFrontend):
         self.grub_new_device_entry.connect('changed', self.grub_verify_loop,
             self.grub_fail_okbutton)
 
+        self.login_pass.hide()
+        self.login_encrypt.hide()
+        self.login_auto.hide()
+
         if 'UBIQUITY_AUTOMATIC' in os.environ:
             self.debconf_progress_start(0, self.pageslen,
                 self.get_string('ubiquity/install/title'))

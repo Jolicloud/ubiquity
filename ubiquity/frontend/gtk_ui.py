@@ -948,12 +948,8 @@ class Wizard(BaseFrontend):
             self.progress_cancel_button.set_label(
                 self.old_progress_cancel_button.get_label())
             
-            # Set the install window to the (presumably dark) theme colors.
-            a = gtk.Menu().rc_get_style()
-            bg = a.bg[gtk.STATE_NORMAL]
-            fg = a.fg[gtk.STATE_NORMAL]
-            self.install_progress_window.modify_bg(gtk.STATE_NORMAL, bg)
-            self.install_progress_info.modify_fg(gtk.STATE_NORMAL, fg)
+            # FIXME hardcode Jolicloud color here, as the theme is bugged
+            self.install_progress_window.modify_bg(gtk.STATE_NORMAL, "#333642")
 
         else:
             self.debconf_progress_window = self.old_progress_window

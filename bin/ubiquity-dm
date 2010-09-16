@@ -266,6 +266,12 @@ EndSection
                      '/apps/metacity/general/num_workspaces', '1'],
                     stdin=null, stdout=logfile, stderr=logfile,
                     preexec_fn=self.drop_privileges)
+                subprocess.call(
+                    ['gconftool-2', '--config-source', gconf_dir,
+                     '--type', 'str', '--set',
+                     '/desktop/gnome/background/primary_color', '#333642'],
+                    stdin=null, stdout=logfile, stderr=logfile,
+                    preexec_fn=self.drop_privileges)
                 subp = subprocess.Popen(
                     ['gconftool-2', '--config-source', gconf_dir,
                      '--get', '/desktop/gnome/interface/accessibility'],

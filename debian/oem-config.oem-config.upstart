@@ -9,6 +9,7 @@ author		"Ubuntu Installer Team <ubuntu-installer@lists.ubuntu.com>"
 start on (starting gdm
 	  or starting kdm
 	  or starting xdm
+	  or starting slim
 	  or starting uxlaunch
 	  or stopping rc RUNLEVEL=[2345])
 stop on runlevel [06]

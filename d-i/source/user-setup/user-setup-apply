@@ -275,6 +275,14 @@ TimedLoginDelay=10"
 					-e "s/^#?AutoReLogin=.*\$/AutoReLogin=true/" \
 					/etc/kde4/kdm/kdmrc
 			fi
+			
+			if $chroot $ROOT [ -f /etc/slim.conf ]; then
+				# Configure SLiM autologin
+				$log $chroot $ROOT sed -i$BACKUP -r \
+					-e "s/^#?auto_login.*\$/auto_login    yes/" \
+					-e "s/^#?default_user.*\$/default_user    $USER/" \
+					/etc/slim.conf
+			fi
 		fi
 	fi
 

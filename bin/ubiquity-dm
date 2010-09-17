@@ -20,7 +20,7 @@ from ubiquity import osextras
 from ubiquity.casper import get_casper
 from ubiquity.debconfcommunicator import DebconfCommunicator
 
-background = '/usr/share/backgrounds/warty-final-ubuntu.png'
+background = ''
 
 def set_locale():
     db = DebconfCommunicator('ubiquity', cloexec=True)
@@ -272,6 +272,12 @@ EndSection
                      '/desktop/gnome/background/primary_color', '#333642'],
                     stdin=null, stdout=logfile, stderr=logfile,
                     preexec_fn=self.drop_privileges)
+                subprocess.call(
+                    ['gconftool-2', '--config-source', gconf_dir,
+                     '--type', 'str', '--set',
+                     '/desktop/gnome/background/picture_filename', ''],
+                    stdin=null, stdout=logfile, stderr=logfile,
+                    preexec_fn=self.drop_privileges)
                 subp = subprocess.Popen(
                     ['gconftool-2', '--config-source', gconf_dir,
                      '--get', '/desktop/gnome/interface/accessibility'],
@@ -303,7 +309,7 @@ EndSection
                 (pixmap, mask) = scaled.render_pixmap_and_mask(0)
                 root.set_back_pixmap(pixmap, False)
             else:
-                root.set_background(gtk.gdk.Color("#333642"))
+                root.set_background(gtk.gdk.Color('#333642'))
             root.clear()
             gtk.gdk.flush()
             fp.close()

@@ -1,2 +1,4 @@
 deb-src http://archive.ubuntu.com/ubuntu lucid main
 deb-src http://archive.ubuntu.com/ubuntu lucid-updates main
+deb-src http://apt.jolicloud.org robby main
+deb-src http://apt.jolicloud.org robby-upgrade-v1.1 main

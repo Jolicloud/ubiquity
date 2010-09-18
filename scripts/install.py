@@ -2192,7 +2192,7 @@ class Install:
         components."""
 
         # We only ever install these packages from the CD.
-        sources_list = os.path.join(self.target, 'etc/apt/sources.list')
+        sources_list = os.path.join(self.target, 'etc/apt/sources.list.d/ubuntu.list')
         os.rename(sources_list, "%s.apt-setup" % sources_list)
         old_sources = open("%s.apt-setup" % sources_list)
         new_sources = open(sources_list, 'w')

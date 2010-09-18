@@ -2,6 +2,8 @@ cpuinfo cittagazze.cpuinfo
 majors 2.6
 flavour 686-may-bigmem
 kernel-2.6 \
+  linux-jolicloud \
+  linux-image-jolicloud \
   linux-generic \
   linux-image-generic \
   linux-virtual \
@@ -18,9 +20,11 @@ usable \
   linux-386 \
   linux-generic \
   linux-generic-pae \
+  linux-jolicloud \
   linux-image-386 \
   linux-image-generic \
   linux-image-generic-pae \
+  linux-image-jolicloud \
   linux-image-2.6.20-15-386 \
   linux-image-2.6.20-15-generic \
   linux-image-2.6.20-15-generic-pae

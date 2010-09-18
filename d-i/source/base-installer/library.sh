@@ -33,7 +33,7 @@ if [ "$MEMTOTAL" = 0 ]; then
 fi
 
 # files and directories
-APT_SOURCES=/target/etc/apt/sources.list
+APT_SOURCES=/target/etc/apt/sources.list.d/ubuntu.list
 APT_CONFDIR=/target/etc/apt/apt.conf.d
 IT_CONFDIR=/target/etc/initramfs-tools/conf.d
 

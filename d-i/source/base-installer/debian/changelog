@@ -1,3 +1,10 @@
+base-installer (1.104jolicloud1+l8) robby; urgency=low
+
+  * Use /etc/apt/sources.list.d/ubuntu.list, not /etc/apt/sources.list
+  * Added jolicloud, jolicloud-atom kernel identification and selection
+
+ -- Adam McDaniel <adam@jolicloud.org>  Sat, 18 Sep 2010 17:18:42 -0600
+
 base-installer (1.103ubuntu7) lucid; urgency=low
 
   * Add armel/omap subarchitecture.

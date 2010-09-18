@@ -1,5 +1,5 @@
 apt-setup 1:0.43jolicloud1+l3
-base-installer 1.103ubuntu7
+base-installer 1.104jolicloud1+l8
 bterm-unifont 1.1build1
 choose-mirror 2.29ubuntu3
 clock-setup 0.102ubuntu1

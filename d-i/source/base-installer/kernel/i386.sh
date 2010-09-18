@@ -108,6 +108,8 @@ arch_get_kernel () {
 	if [ "$1" = 686-atom ] || [ "$1" = 686-bigmem ] || [ "$1" = 686-may-bigmem ] || [ "$1" = 686 ] || [ "$1" = 586 ]; then
 		echo "linux-jolicloud"
 		echo "linux-image-jolicloud"
+		echo "linux-generic"
+		echo "linux-image-generic"
 		echo "linux-virtual"
 		echo "linux-image-virtual"
 		echo "linux-rt"

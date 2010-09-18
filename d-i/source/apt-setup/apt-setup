@@ -89,7 +89,11 @@ for generator in $gendir/*; do
 
 	progress_advance
 done
-mv $ROOT/etc/apt/sources.list.new $ROOT/etc/apt/sources.list
+mv $ROOT/etc/apt/sources.list.new $ROOT/etc/apt/sources.list.d/ubuntu.list
+cat > $ROOT/etc/apt/sources.list <<EOF
+# The legacy UBUNTU APT sources.list has been moved to the file
+# /etc/apt/sources.list.d/ubuntu.list
+EOF
 if [ -s $ROOT/etc/apt/apt.conf.new ]; then
 	mv $ROOT/etc/apt/apt.conf.new $ROOT/etc/apt/apt.conf
 else

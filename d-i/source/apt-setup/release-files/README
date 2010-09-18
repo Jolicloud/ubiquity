@@ -5,9 +5,3 @@ are safe right from initial installation, we provide sample signed Release
 files for them. The age of these Release files does not matter; all that
 matters is that they were downloaded from the archive in question at some
 point, and that they are signed by a currently valid key.
-
-When packaging ubiquity, check the modification date of the release files.
-It should be the release date of the version, as apt uses this date to 
-know if it needs to update the cache. If the date is too near, the Release
-file won't be updated, and apt-get update will fail because of checksum
-mismatchs.

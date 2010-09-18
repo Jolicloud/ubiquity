@@ -27,7 +27,6 @@ binary-indep: build install
 	dh_strip
 	dh_compress
 	dh_fixperms
-	find release-files -type f -exec touch -m -d "2008-01-01" {} \;
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol

@@ -1,3 +1,9 @@
+apt-setup (1:0.43jolicloud1+l3) robby; urgency=low
+
+  * Define legacy Ubuntu APT sources in /etc/apt/sources.list.d/ubuntu.list
+
+ -- Adam McDaniel <adam@jolicloud.org>  Sat, 18 Sep 2010 15:28:24 -0600
+
 apt-setup (1:0.42ubuntu3) lucid; urgency=low
 
   * Mount /proc, /sys, and /dev in the target system if necessary when

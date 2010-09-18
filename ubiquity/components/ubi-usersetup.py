@@ -183,11 +183,11 @@ class PageGtk(PageBase):
             self.username.set_editable(False)
             self.username.set_sensitive(False)
             self.username_edited = True
-            if self.laptop:
-                self.hostname.set_text('oem-laptop')
-            else:
-                self.hostname.set_text('oem-desktop')
-            self.hostname_edited = True
+            #if self.laptop:
+            #    self.hostname.set_text('oem-laptop')
+            #else:
+            #    self.hostname.set_text('oem-desktop')
+            #self.hostname_edited = True
             self.login_vbox.hide()
             # The UserSetup component takes care of preseeding passwd/user-uid.
             execute_root('apt-install', 'oem-config-gtk')
@@ -388,12 +388,12 @@ class PageKde(PageBase):
             self.page.login_auto.hide()
             self.page.login_encrypt.hide()
             self.username_edited = True
-            self.hostname_edited = True
+            #self.hostname_edited = True
 
-            if self.laptop:
-                self.page.hostname.setText('oem-laptop')
-            else:
-                self.page.hostname.setText('oem-desktop')
+            #if self.laptop:
+            #    self.page.hostname.setText('oem-laptop')
+            #else:
+            #    self.page.hostname.setText('oem-desktop')
 
             # The UserSetup component takes care of preseeding passwd/user-uid.
             execute_root('apt-install', 'oem-config-kde')

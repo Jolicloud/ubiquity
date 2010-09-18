@@ -3,6 +3,7 @@ Type: select
 Choices: ${SHORTLIST}, other
 Choices-am.UTF-8: ${SHORTLIST}, ሌላ
 Choices-ar.UTF-8: ${SHORTLIST}, أخرى
+Choices-ast.UTF-8: ${SHORTLIST}, otru
 Choices-be.UTF-8: ${SHORTLIST}, іншае
 Choices-bg.UTF-8: ${SHORTLIST}, друга
 Choices-bn.UTF-8: ${SHORTLIST}, অন্যান্য
@@ -16,6 +17,7 @@ Choices-dz.UTF-8: ${SHORTLIST}, གཞན།
 Choices-el.UTF-8: ${SHORTLIST}, άλλη
 Choices-eo.UTF-8: ${SHORTLIST}, alia
 Choices-es.UTF-8: ${SHORTLIST}, otro
+Choices-et.UTF-8: ${SHORTLIST}, muu
 Choices-eu.UTF-8: ${SHORTLIST}, bestelakoa
 Choices-fi.UTF-8: ${SHORTLIST}, muu
 Choices-fr.UTF-8: ${SHORTLIST}, Autre
@@ -30,6 +32,7 @@ Choices-id.UTF-8: ${SHORTLIST}, lainnya
 Choices-it.UTF-8: ${SHORTLIST}, altro
 Choices-ja.UTF-8: ${SHORTLIST}, その他
 Choices-ka.UTF-8: ${SHORTLIST}, სხვა
+Choices-kk.UTF-8: ${SHORTLIST}, басқа
 Choices-km.UTF-8: ${SHORTLIST}, ផ្សេងៗ
 Choices-ko.UTF-8: ${SHORTLIST}, 기타
 Choices-ku.UTF-8: ${SHORTLIST}, wekî din
@@ -71,6 +74,8 @@ Description-am.UTF-8: አገር፣ ክፍለ አስተዳደር ወይም አካ
  ከቋንቋዎ እንደምገምተው ከዚህ በታች ከተዘረዘሩት በአንዱ አገር ወይም አካባቢ ይኖራሉ።
 Description-ar.UTF-8: اختر دولة، أو مقاطعة أو منطقة:
  وفقاً للغتك، أنت على الأرجح في أحد هذه الدّول أو الأقاليم.
+Description-ast.UTF-8: Escueya un país, territoriu o área:
+ Pola llingua qu'escoyó, ye dable que s'alcuentre en dalgún de los siguientes países o rexones.
 Description-be.UTF-8: Выберыце краіну, вобласць або рэгіён:
  Мяркуючы па Вашай мове, Вы знаходзіцеся ў адной з гэтых краінаў альбо тэрыторыяў.
 Description-bg.UTF-8: Изберете държава, територия или област:
@@ -97,6 +102,8 @@ Description-eo.UTF-8: Elektu landon, teritorion aŭ aeron:
  Laŭ via lingvo, vi verŝajne loĝas en unu el tiuj ĉi landoj aŭ regionoj.
 Description-es.UTF-8: Escoja un país, territorio o área:
  Basándose en el idioma que ha elegido, es probable que se encuentre en alguno de los siguientes países o regiones.
+Description-et.UTF-8: Vali riik, territoorium või piirkond:
+ Valitud keele põhjal asud tõenäoliselt ühes neist riikidest või piirkondadest.
 Description-eu.UTF-8: Aukeratu estatua, herrialdea edo eskualdea:
  Hizkuntza kontuan hartuta, ziurrenik hauetako estatu edo eskualde batean egongo zara.
 Description-fi.UTF-8: Valitse maa tai alue:
@@ -119,12 +126,14 @@ Description-hu.UTF-8: Válassz országot, tartományt vagy területet:
  A választott nyelv alapján valószínű tartózkodási helyet adó ország(ok) vagy régió(k).
 Description-id.UTF-8: Pilih suatu negara, teritorial atau daerah:
  Berdasarkan bahasa Anda, mungkin Anda berada di negara atau wilayah berikut.
-Description-it.UTF-8: Selezionare una nazione, un territorio o un'area:
+Description-it.UTF-8: Scegliere una nazione, un territorio o un'area:
  In seguito alla scelta della lingua, si è probabilmente in una di queste nazioni o regioni.
 Description-ja.UTF-8: 国・領土・地域を選んでください:
  言語に基づくと、あなたはこれらの国または地域の 1 つにいると思われます。
 Description-ka.UTF-8: ამოირჩიეთ ქვეყანა, ტერიტორია ან რეგიონი:
  ამორჩეული ენის მიხედვით, თქვენ ალბათ რომელიმე ქვემოთ ჩამოთვლილ ქვეყანაში ან რეგიონში იმყოფებით.
+Description-kk.UTF-8: Ел, аймақ таңдаңыз:
+ Тіліңізге сәйкес, сіз келесі елдердің бірінде орналасқан шығарсыз:
 Description-km.UTF-8: ជ្រើស​ប្រទេស ដែនដី ឬ តំបន់​មួយ ៖
  ដោយ​ផ្អែក​លើ​​ភាសា​របស់​អ្នក អ្នក​ប្រហែល​ជា​ស្ថិត​នៅ​ក្នុង​តំបន់ ឬ ប្រទេស​ទាំងនេះ ។
 Description-ko.UTF-8: 국가 혹은 지역을 선택하십시오:

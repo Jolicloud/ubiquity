@@ -1,3 +1,9 @@
+user-setup (1.29jolicloud1+l7) robby; urgency=low
+
+  * Added SLiM support into the user-auto-login setup procedure
+
+ -- Adam McDaniel <adam@jolicloud.org>  Sat, 18 Sep 2010 16:08:02 -0600
+
 user-setup (1.28ubuntu7) lucid; urgency=low
 
   * Allow forcing the encrypted home option (LP: #566552).

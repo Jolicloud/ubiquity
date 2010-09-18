@@ -40,7 +40,13 @@ arch_get_kernel_flavour () {
 		;;
 	    " GenuineIntel")
 		case "$FAMILY" in
-		    " 6"|" 15")	echo 686$BIGMEM ;;
+		    " 6")
+			case "$MODEL" in
+			    " 28")	echo 686-atom ;;
+			    *)		echo 686$BIGMEM ;;
+			esac
+			;;
+		    " 15")	echo 686$BIGMEM ;;
 		    " 5")	echo 586 ;;
 		    *)		echo 486 ;;
 		esac
@@ -74,10 +80,10 @@ arch_get_kernel_flavour () {
 arch_check_usable_kernel () {
 	if echo "$1" | grep -Eq -- "-386(-.*)?$"; then return 0; fi
 	if [ "$2" = 486 ]; then return 1; fi
-	if echo "$1" | grep -Eq -- "-(generic|virtual|rt)(-.*)?$" && ! echo "$1" | grep -Eq -- "-generic-pae(-.*)?$"; then return 0; fi
+	if echo "$1" | grep -Eq -- "-(jolicloud|generic|virtual|rt)(-.*)?$" && ! echo "$1" | grep -Eq -- "-(jolicloud-atom|generic-pae)(-.*)?$"; then return 0; fi
 	if [ "$2" = 586 ] || [ "$2" = 686 ]; then return 1; fi
-	if echo "$1" | grep -Eq -- "-(generic-pae|xen)(-.*)?$"; then return 0; fi
-	if [ "$2" = 686-may-bigmem ] || [ "$2" = 686-bigmem ]; then return 1; fi
+	if echo "$1" | grep -Eq -- "-(jolicloud-atom|generic-pae|xen)(-.*)?$"; then return 0; fi
+	if [ "$2" = 686-may-bigmem ] || [ "$2" = 686-bigmem || [ "$2" = 686-atom ]; then return 1; fi
 
 	# default to usable in case of strangeness
 	warning "Unknown kernel usability: $1 / $2"
@@ -89,15 +95,19 @@ arch_get_kernel () {
 
 	# See older versions of script for more flexible code structure
 	# that allows multiple levels of fallbacks
+	if [ "$1" = 686-atom ]; then
+		echo "linux-jolicloud-atom"
+		echo "linux-image-jolicloud-atom"
+	fi
 	if [ "$1" = 686-bigmem ]; then
 		echo "linux-generic-pae"
 		echo "linux-image-generic-pae"
 		echo "linux-xen"
 		echo "linux-image-xen"
 	fi
-	if [ "$1" = 686-bigmem ] || [ "$1" = 686-may-bigmem ] || [ "$1" = 686 ] || [ "$1" = 586 ]; then
-		echo "linux-generic"
-		echo "linux-image-generic"
+	if [ "$1" = 686-atom ] || [ "$1" = 686-bigmem ] || [ "$1" = 686-may-bigmem ] || [ "$1" = 686 ] || [ "$1" = 586 ]; then
+		echo "linux-jolicloud"
+		echo "linux-image-jolicloud"
 		echo "linux-virtual"
 		echo "linux-image-virtual"
 		echo "linux-rt"

@@ -37,6 +37,22 @@ incompatible=
 # TODO cjwatson 2009-10-19: Nasty hack for PAE-capable systems; see
 # https://launchpad.net/bugs/413135. We should generalise this somehow.
 case $preferred_kernels in
+    linux-jolicloud-atom*)
+	if [ "$(apt-cache search -n '^linux-jolicloud-atom$')" ]; then
+		install_new="${install_new:+$install_new }linux-jolicloud-atom"
+		for kernel in $kernels; do
+			case $kernel in
+			    *-jolicloud-atom)
+				compatible="${compatible:+$compatible }$kernel"
+				;;
+			    *)
+				incompatible="${incompatible:+$incompatible }$kernel"
+				;;
+			esac
+		done
+	fi
+	;;
+
     linux-generic-pae*)
 	if [ "$(apt-cache search -n '^linux-generic-pae$')" ]; then
 		install_new="${install_new:+$install_new }linux-generic-pae"

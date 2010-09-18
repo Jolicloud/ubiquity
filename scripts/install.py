@@ -2051,7 +2051,7 @@ class Install:
                 if kernel.startswith('linux-image-2.'):
                     new_kernel_pkg = kernel
                     new_kernel_version = kernel[12:]
-                elif kernel.startswith('linux-generic-'):
+                elif kernel.startswith('linux-generic-') or kernel.startswith('linux-jolicloud-'):
                     # Traverse dependencies to find the real kernel image.
                     cache = Cache()
                     kernel = self.traverse_for_kernel(cache, kernel)

@@ -888,11 +888,16 @@ class Install:
             pass
         try:
             if self.db.get('oem-config/enable') == 'true':
-                oem_id = self.db.get('oem-config/id')
-                oem_id_file = open(
-                    os.path.join(self.target, 'var/log/installer/oem-id'), 'w')
-                print >>oem_id_file, oem_id
-                oem_id_file.close()
+                device_type = self.db.get('oem-config/device-type')
+                device_manufacturer = self.db.get('oem-config/device-manufacturer')
+                device_model = self.db.get('oem-config/device-model')
+                oem_file = open(
+                    os.path.join(self.target, 'etc/jolicloud-oem.conf'), 'w')
+                print >>oem_file, "[device]"
+                print >>oem_file, "type=%s" % device_type
+                print >>oem_file, "manufacturer=%s" % device_manufacturer
+                print >>oem_file, "model=%s" % device_model
+                oem_file.close()
         except (debconf.DebconfError, IOError):
             pass
 

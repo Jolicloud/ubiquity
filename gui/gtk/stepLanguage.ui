@@ -29,7 +29,6 @@
     <child>
       <object class="GtkVBox" id="vbox4">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="welcome_heading_label">
             <property name="visible">True</property>
@@ -38,7 +37,6 @@
             <property name="yalign">0</property>
             <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Welcome&lt;/b&gt;&lt;/big&gt;</property>
             <property name="use_markup">True</property>
-            <property name="selectable">False</property>
             <property name="single_line_mode">True</property>
           </object>
           <packing>
@@ -61,22 +59,19 @@
         <child>
           <object class="GtkVBox" id="vbox1">
             <property name="visible">True</property>
-            <property name="orientation">vertical</property>
             <property name="spacing">36</property>
             <child>
               <object class="GtkVBox" id="try_section_vbox">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
                 <property name="spacing">18</property>
                 <child>
                   <object class="GtkLabel" id="try_text_label">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="xalign">0</property>
-            	    <property name="yalign">0</property>
-                    <property name="label" translatable="yes">You can try Ubuntu from this CD without making any changes to your system.</property>
+                    <property name="yalign">0</property>
+                    <property name="label" translatable="yes">You can try Jolicloud from this CD without making any changes to your system.</property>
                     <property name="wrap">True</property>
-                    <property name="selectable">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -91,7 +86,7 @@
                     <property name="xscale">0</property>
                     <child>
                       <object class="GtkButton" id="try_ubuntu">
-                        <property name="label" translatable="yes">Try Ubuntu</property>
+                        <property name="label" translatable="yes">Try Jolicloud</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -113,18 +108,16 @@
             <child>
               <object class="GtkVBox" id="install_section_vbox">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
                 <property name="spacing">18</property>
                 <child>
                   <object class="GtkVBox" id="install_text_vbox">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="ready_text_label">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-            	        <property name="yalign">0</property>
+                        <property name="yalign">0</property>
                         <property name="label" translatable="yes">Ready to install?  Once you answer a few questions, the contents of the live CD can be installed on this computer so you can run Ubuntu at full speed without the CD.</property>
                         <property name="wrap">True</property>
                       </object>
@@ -136,7 +129,7 @@
                       <object class="GtkLabel" id="duration_text_label">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-            	        <property name="yalign">0</property>
+                        <property name="yalign">0</property>
                         <property name="label" translatable="yes">Answering the questions should only take a few minutes.</property>
                         <property name="wrap">True</property>
                       </object>
@@ -148,7 +141,7 @@
                       <object class="GtkLabel" id="alpha_warning_label">
                         <property name="visible">True</property>
                         <property name="xalign">0</property>
-            	        <property name="yalign">0</property>
+                        <property name="yalign">0</property>
                         <property name="label" translatable="yes">This is a pre-release of the Ubuntu live CD installer. It is not a final release; that will come with the final release of Ubuntu 10.04 in April 2010.
 
 The installation process may resize or erase partitions on your hard disk. Be sure to &lt;b&gt;take a full backup of any valuable data&lt;/b&gt; before running this program.</property>
@@ -156,18 +149,17 @@ The installation process may resize or erase partitions on your hard disk. Be su
                         <property name="wrap">True</property>
                       </object>
                       <packing>
-                        <property name="position">3</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="release_notes_label">
                         <property name="can_focus">True</property>
                         <property name="xalign">0</property>
-            	        <property name="yalign">0</property>
+                        <property name="yalign">0</property>
                         <property name="label" translatable="yes">You may wish to &lt;a href=""&gt;read the release notes&lt;/a&gt; or &lt;a href=""&gt;update this installer&lt;/a&gt;.</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
-                        <property name="selectable">False</property>
                         <signal name="activate_link" handler="on_link_clicked"/>
                       </object>
                       <packing>
@@ -177,46 +169,113 @@ The installation process may resize or erase partitions on your hard disk. Be su
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkVBox" id="oem_id_vbox">
+                      <object class="GtkVBox" id="oem_vbox">
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkLabel" id="oem_id_label">
+                          <object class="GtkLabel" id="oem_label">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="xalign">0</property>
-            	            <property name="yalign">0</property>
-                            <property name="label" translatable="yes">You are installing in system manufacturer mode. Please enter a unique name for this batch of systems. This name will be saved on the installed system and can be used to help with bug reports.</property>
+                            <property name="yalign">0</property>
+                            <property name="label" translatable="yes">You are installing in system manufacturer (OEM) mode. Please enter the specific details for this batch of systems. This information will be saved on the installed system and be accessable by the Jolicloud daemon.</property>
                             <property name="wrap">True</property>
-                            <property name="selectable">False</property>
                           </object>
                           <packing>
                             <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkAlignment" id="alignment1">
+                          <object class="GtkHBox" id="hbox1">
                             <property name="visible">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="xalign">0</property>
-                            <property name="xscale">0</property>
-                            <property name="left_padding">12</property>
                             <child>
-                              <object class="GtkEntry" id="oem_id_entry">
+                              <object class="GtkLabel" id="oem_type_label">
+                                <property name="width_request">100</property>
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Device Type</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="oem_type_entry">
+                                <property name="width_request">200</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="invisible_char">&#x25CF;</property>
-                                <property name="activates_default">True</property>
-                                <property name="width_chars">30</property>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">1</property>
+                              </packing>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
                             <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkHBox" id="hbox2">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkLabel" id="oem_manufacturer_label">
+                                <property name="width_request">100</property>
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Manufacturer</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="oem_manufacturer_entry">
+                                <property name="width_request">200</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="invisible_char">&#x25CF;</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkHBox" id="hbox3">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkLabel" id="oem_model_label">
+                                <property name="width_request">100</property>
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Model</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="oem_model_entry">
+                                <property name="width_request">200</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="invisible_char">&#x25CF;</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                       </object>
@@ -241,7 +300,7 @@ The installation process may resize or erase partitions on your hard disk. Be su
                     <property name="xscale">0</property>
                     <child>
                       <object class="GtkButton" id="install_ubuntu">
-                        <property name="label" translatable="yes">Install Ubuntu</property>
+                        <property name="label" translatable="yes">Install Jolicloud</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

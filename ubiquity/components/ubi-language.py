@@ -52,10 +52,22 @@ class PageBase(PluginUI):
         """Get the current selected language."""
         return 'C'
 
-    def set_oem_id(self, text):
+    def set_oem_type(self, text):
         pass
 
-    def get_oem_id(self):
+    def get_oem_type(self):
+        return ''
+
+    def set_oem_manufacturer(self, text):
+        pass
+
+    def get_oem_manufacturer(self):
+        return ''
+
+    def set_oem_model(self, text):
+        pass
+
+    def get_oem_model(self):
         return ''
 
     def set_alpha_warning(self, show):
@@ -81,10 +93,12 @@ class PageGtk(PageBase):
             self.page = builder.get_object('stepLanguage')
             self.iconview = builder.get_object('language_iconview')
             self.treeview = builder.get_object('language_treeview')
-            self.oem_id_entry = builder.get_object('oem_id_entry')
+            self.oem_type_entry = builder.get_object('oem_type_entry')
+            self.oem_manufacturer_entry = builder.get_object('oem_manufacturer_entry')
+            self.oem_model_entry = builder.get_object('oem_model_entry')
 
             if self.controller.oem_config:
-                builder.get_object('oem_id_vbox').show()
+                builder.get_object('oem_vbox').show()
 
             self.release_notes_url = ''
             self.update_installer = True
@@ -299,11 +313,23 @@ class PageGtk(PageBase):
             for w in self.page.get_children():
                 w.show()
 
-    def set_oem_id(self, text):
-        return self.oem_id_entry.set_text(text)
+    def set_oem_type(self, text):
+        return self.oem_type_entry.set_text(text)
 
-    def get_oem_id(self):
-        return self.oem_id_entry.get_text()
+    def get_oem_type(self):
+        return self.oem_type_entry.get_text()
+
+    def set_oem_manufacturer(self, text):
+        return self.oem_manufacturer_entry.set_text(text)
+
+    def get_oem_manufacturer(self):
+        return self.oem_manufacturer_entry.get_text()
+
+    def set_oem_model(self, text):
+        return self.oem_model_entry.set_text(text)
+
+    def get_oem_model(self):
+        return self.oem_model_entry.get_text()
 
     def on_link_clicked(self, widget, uri):
         # Connected in glade.
@@ -349,8 +375,13 @@ class PageKde(PageBase):
             self.page.try_ubuntu.clicked.connect(self.on_try_ubuntu_clicked)
 
             if not self.controller.oem_config:
-                self.page.oem_id_label.hide()
-                self.page.oem_id_entry.hide()
+                self.page.oem_label.hide()
+                self.page.oem_type_label.hide()
+                self.page.oem_type_entry.hide()
+                self.page.oem_manufacturer_label.hide()
+                self.page.oem_manufacturer_entry.hide()
+                self.page.oem_model_label.hide()
+                self.page.oem_model_entry.hide()
 
             self.release_notes_url = ''
             try:
@@ -483,11 +514,23 @@ class PageKde(PageBase):
             w.show()
         self.widgetHidden = []
 
-    def set_oem_id(self, text):
-        return self.page.oem_id_entry.setText(text)
+    def set_oem_type(self, text):
+        return self.page.oem_type_entry.setText(text)
 
-    def get_oem_id(self):
-        return unicode(self.page.oem_id_entry.text())
+    def get_oem_type(self):
+        return unicode(self.page.oem_type_entry.text())
+
+    def set_oem_manufacturer(self, text):
+        return self.page.oem_manufacturer_entry.setText(text)
+
+    def get_oem_manufacturer(self):
+        return unicode(self.page.oem_manufacturer_entry.text())
+
+    def set_oem_model(self, text):
+        return self.page.oem_model_entry.setText(text)
+
+    def get_oem_model(self):
+        return unicode(self.page.oem_model_entry.text())
 
 class PageDebconf(PageBase):
     plugin_title = 'ubiquity/text/language_heading_label'
@@ -518,7 +561,9 @@ class Page(Plugin):
             osextras.unlink_force('/var/lib/localechooser/langlevel')
         if self.ui.controller.oem_config:
             try:
-                self.ui.set_oem_id(self.db.get('oem-config/id'))
+                self.ui.set_oem_type(self.db.get('oem-config/device-type'))
+                self.ui.set_oem_manufacturer(self.db.get('oem-config/device-manufacturer'))
+                self.ui.set_oem_model(self.db.get('oem-config/device-model'))
             except debconf.DebconfError:
                 pass
 
@@ -566,7 +611,9 @@ class Page(Plugin):
                 self.initial_language != new_language):
                 self.db.reset('debian-installer/country')
         if self.ui.controller.oem_config:
-            self.preseed('oem-config/id', self.ui.get_oem_id())
+            self.preseed('oem-config/device-type', self.ui.get_oem_type())
+            self.preseed('oem-config/device-manufacturer', self.ui.get_oem_manufacturer())
+            self.preseed('oem-config/device-model', self.ui.get_oem_model())
         Plugin.ok_handler(self)
 
     def cleanup(self):

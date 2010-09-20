@@ -20,7 +20,7 @@ from ubiquity import osextras
 from ubiquity.casper import get_casper
 from ubiquity.debconfcommunicator import DebconfCommunicator
 
-background = ''
+background = '/usr/share/backgrounds/jolicloud-gray.png'
 
 def set_locale():
     db = DebconfCommunicator('ubiquity', cloexec=True)
@@ -275,7 +275,13 @@ EndSection
                 subprocess.call(
                     ['gconftool-2', '--config-source', gconf_dir,
                      '--type', 'str', '--set',
-                     '/desktop/gnome/background/picture_filename', ''],
+                     '/desktop/gnome/background/picture_filename', background],
+                    stdin=null, stdout=logfile, stderr=logfile,
+                    preexec_fn=self.drop_privileges)
+                subprocess.call(
+                    ['gconftool-2', '--config-source', gconf_dir,
+                     '--type', 'str', '--set',
+                     '/desktop/gnome/background/picture_options', 'wallpaper'],
                     stdin=null, stdout=logfile, stderr=logfile,
                     preexec_fn=self.drop_privileges)
                 subp = subprocess.Popen(

@@ -954,6 +954,7 @@ class Wizard(BaseFrontend):
             
             # FIXME hardcode Jolicloud color here, as the theme is bugged
             self.install_progress_window.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('#333642'))
+            self.progress_cancel_button.hide()
             if 'UBIQUITY_ONLY' in os.environ:
                 self.install_progress_window.set_decorated(False)
 
@@ -962,6 +963,7 @@ class Wizard(BaseFrontend):
             self.progress_info = self.old_progress_info
             self.progress_bar = self.old_progress_bar
             self.progress_cancel_button = self.old_progress_cancel_button
+            self.progress_cancel_button.hide()
 
     def progress_loop(self):
         """prepare, copy and config the system in the core install process."""
@@ -1306,11 +1308,8 @@ class Wizard(BaseFrontend):
         self.progress_position.set_region(region_start, region_end)
 
     def debconf_progress_cancellable (self, cancellable):
-        if cancellable:
-            self.progress_cancel_button.show()
-        else:
-            self.progress_cancel_button.hide()
-            self.progress_cancelled = False
+        self.progress_cancel_button.hide()
+        self.progress_cancelled = False
 
     def on_progress_cancel_button_clicked (self, unused_button):
         self.progress_cancelled = True

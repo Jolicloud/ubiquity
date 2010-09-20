@@ -1289,8 +1289,6 @@ class Wizard(BaseFrontend):
     def debconf_progress_info (self, progress_info):
         if self.progress_cancelled:
             return False
-        self.progress_info.set_markup(
-            '<i>' + xml.sax.saxutils.escape(progress_info) + '</i>')
         return True
 
     def debconf_progress_stop (self):

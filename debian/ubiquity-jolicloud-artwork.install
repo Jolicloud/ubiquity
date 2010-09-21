@@ -1,4 +1,4 @@
-desktop/jolicloud-ubiquity.png usr/share/pixmaps/ubiquity.png
+desktop/jolicloud/ubiquity.png usr/share/pixmaps
 pixmaps/jolicloud usr/share/ubiquity/pixmaps
 pixmaps/timezone usr/share/ubiquity/pixmaps
-pixmaps/backgrounds/jolicloud-gray.png usr/share/backgrounds/jolicloud-gray.png
+pixmaps/backgrounds/jolicloud-gray.png usr/share/backgrounds

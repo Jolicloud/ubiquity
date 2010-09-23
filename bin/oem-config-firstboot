@@ -53,20 +53,23 @@ else
 fi
 for try in $(seq 1 $TRY); do
 	CODE=0
+	plymouth quit || true
 	if [ "$FRONTEND" = debconf_ui ]; then
-		plymouth quit || true
 		LANG=en_US.UTF-8 FRONTEND="$FRONTEND" \
 		/usr/sbin/oem-config-wrapper $DEBUG --only \
 			2>>/var/log/oem-config.log \
 			|| CODE=$?
 	else
 		FRONTEND="$FRONTEND" \
-		/usr/bin/ubiquity-dm vt7 :0 root \
+		/usr/bin/ubiquity-dm vt1 :0 root \
 			/usr/sbin/oem-config-wrapper $DEBUG --only || CODE=$?
 	fi
+	plymouthd
+	plymouth show-splash
 	if [ "$CODE" -eq 0 ]; then
 		exit 0
 	elif [ "$CODE" -eq 10 ]; then
+		plymouth quit
 		cat <<EOF
 Your system is not yet configured. Press 'a' to try again, 's' for a
 recovery shell, or 'r' to reboot.

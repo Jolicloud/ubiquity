@@ -22,20 +22,23 @@ if [ "${RET%% *}" = 0 ]; then
 fi
 RET="$(echo GET oem-config/remove | debconf-communicate)"
 if [ "${RET#* }" = true ]; then
-	case $FRONTEND in
-		debconf_ui)
-			export DEBIAN_FRONTEND=dialog
-			;;
-		gtk_ui)
-			export DEBIAN_FRONTEND=gnome
-			;;
-		kde_ui)
-			export DEBIAN_FRONTEND=kde
-			;;
-	esac
+	#case $FRONTEND in
+	#	debconf_ui)
+	#		export DEBIAN_FRONTEND=dialog
+	#		;;
+	#	gtk_ui)
+	#		export DEBIAN_FRONTEND=gnome
+	#		;;
+	#	kde_ui)
+	#		export DEBIAN_FRONTEND=kde
+	#		;;
+	#esac
 	# We're about to pull the rug out from under our own feet, so this
 	# has to run very late.
+	xsetroot -cursor_name watch
+	export DEBIAN_FRONTEND=noninteractive
 	oem-config-remove || true
+	xsetroot -cursor_name top_left_arrow
 fi
 
 exit 0

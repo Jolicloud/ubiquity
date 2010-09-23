@@ -70,7 +70,7 @@ script
 	plymouth quit || :
 	exec ubiquity noninteractive $debug
     else
-	if ! ubiquity-dm vt7 :0 ubuntu /usr/bin/ubiquity $debug $automatic $choose --only; then
+	if ! ubiquity-dm vt1 :0 ubuntu /usr/bin/ubiquity $debug $automatic $choose --only; then
 	    # has X crashed, or has ubiquity?
             if [ "$automatic" ] && ! [ -f /var/log/installer/version ]; then
                 # in case we crashed before the X startup sequence
@@ -79,5 +79,8 @@ script
             fi
 	fi
     fi
+    plymouthd --mode=shutdown || :
+    plymouth show-splash || :
+
     exit 0
 end script

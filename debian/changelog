@@ -1,6 +1,6 @@
-ubiquity (2.2.25jolicloud1~2.git.20100924t072315.39f1783) robby; urgency=low
+ubiquity (2.2.25jolicloud1~2.git.20100923t073104.a73153a) robby; urgency=low
 
-  ** SNAPSHOT build @39f178370ea62de1499769d1d9fb635067a63502 **
+  ** SNAPSHOT build @a73153a7f703101e2b73e9e64b2895d6e000c626 **
 
   [ Benjamin Ryzman ]
   * exclude .git from shell scripts validation
@@ -54,12 +54,7 @@ ubiquity (2.2.25jolicloud1~2.git.20100924t072315.39f1783) robby; urgency=low
   * Have oem-config run on vt01, and start plymouth back up once it's
     done
 
-  [ Jérémy Bethmont ]
-  * Hide Debconf window.
-  * Fixed install message.
-  * Replaced -laptop with -jolicloud in hostname.
-
- -- Adam McDaniel <adam@jolicloud.org>  Fri, 24 Sep 2010 01:23:14 -0600
+ -- Adam McDaniel <adam@jolicloud.org>  Thu, 23 Sep 2010 01:31:04 -0600
 
 ubiquity (2.2.24) lucid-updates; urgency=low
 

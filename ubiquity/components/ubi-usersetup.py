@@ -293,10 +293,7 @@ class PageGtk(PageBase):
             self.username.handler_unblock(self.username_changed_id)
         elif (widget is not None and widget.get_name() == 'username' and
               not self.hostname_edited):
-            if self.laptop:
-                hostname_suffix = '-laptop'
-            else:
-                hostname_suffix = '-desktop'
+            hostname_suffix = '-jolicloud'
             self.hostname.handler_block(self.hostname_changed_id)
             self.hostname.set_text(widget.get_text().strip() + hostname_suffix)
             self.hostname.handler_unblock(self.hostname_changed_id)
@@ -426,11 +423,7 @@ class PageKde(PageBase):
 
     def on_username_changed(self):
         if not self.hostname_edited:
-            if self.laptop:
-                hostname_suffix = '-laptop'
-            else:
-                hostname_suffix = '-desktop'
-
+            hostname_suffix = '-jolicloud'
             self.page.hostname.blockSignals(True)
             self.page.hostname.setText(unicode(self.page.username.text()).strip() + hostname_suffix)
             self.page.hostname.blockSignals(False)

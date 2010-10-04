@@ -1011,7 +1011,7 @@ _Description: Do you want to return to the partitioner?
 
 Template: ubiquity/text/oem_user_config_title
 Type: text
-_Description: System Configuration
+_Description: Jolicloud Configuration
 
 Template: ubiquity/text/language_heading_label
 Type: text

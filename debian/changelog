@@ -1,3 +1,72 @@
+ubiquity (2.2.25jolicloud1) robby-lucid; urgency=low
+
+  [ Benjamin Ryzman ]
+  * exclude .git from shell scripts validation
+  * Add Jolicloud specific artwork
+  * Reapply "always display installing instead of checking then
+    installing"
+  * Reapply "use gtk.Alignment instead of gtk.Frame for slideshow_frame
+    to remove borders"
+  * add TODO list of earlier commits that we might want to backport (or
+    not)
+  * Use Gconf to set desktop background color
+  * Force installer window background to hardcoded #333642
+  * Undecorate installer window when UBIQUITY_ONLY is set
+  * Hide automatic/encryption login options
+
+  [ Adam McDaniel ]
+  * Instruct ubiquity/oem-config upstart conf to watch for slim's
+    upstart process
+
+  [ Jérémy Bethmont ]
+  * Fixed background again. The color need to be parsed by gdk first.
+  * Fixed wallpaper. Use the default grey color.
+  * Added SLiM support.
+
+  [ Adam McDaniel ]
+  * Updated timezone template
+  * Updated localechooser template
+  * When installing with OEM-mode enabled, do not override the hostname
+    with 'oem-laptop' or 'oem-desktop'; use the default hostname in
+    debconf
+  * Added Jolicloud's repositories for the d-i refresher script
+  * Updated d-i package apt-setup (1:0.43jolicloud1+l3)
+  * Changed internal ubiquity scripts to reference
+    /etc/apt/sources.list.d/ubiquity.list - instead of
+    /etc/apt/sources.list - as changed in apt-setup (0.43jolicloud1+l3)
+  * Updated d-i package user-setup (1.29jolicloud1+l7)
+  * Added jolicloud, jolicloud-atom kernel identification and selection
+  * Updated d-i package base-installer (1.104jolicloud1+l8)
+  * Prompt the OEM installer for device type, manufacturer, and model
+    information
+
+  [ Benjamin Ryzman ]
+  * Add the details during install
+  * never show Skip button
+  * JB workaround for showing gray on Clevo
+  * Display "Setting up your device..." in the progress info
+
+  [ Adam McDaniel ]
+  * Fixed installation error of /usr/share/pixmaps/ubiquity.png
+  * Have ubiquity run on vt01, and start plymouth back up once it's done
+  * Have oem-config run on vt01, and start plymouth back up once it's
+    done
+
+  [ Jérémy Bethmont ]
+  * Hide Debconf window.
+  * Fixed install message.
+  * Replaced -laptop with -jolicloud in hostname.
+
+  [ Jérémy Bethmont ]
+  * Renamed "System Configuration" with "Jolicloud Configuration".
+
+  [ Adam McDaniel ]
+  * Force mount style "traditional" (instead of "UUID") when installing
+    in OEM mode.
+  * Add ./build-locale into .gitignore
+
+ -- Adam McDaniel <adam@jolicloud.org>  Wed, 06 Oct 2010 11:35:07 -0600
+
 ubiquity (2.2.25) lucid-proposed; urgency=low
 
   * Refactor default boot device calculation, bringing it into sync with

@@ -20,6 +20,16 @@ addfstab () {
 db_get partman/mount_style
 style="$RET"
 
+db_get oem-config/enable
+oem="$RET"
+
+# Do not use the UUID or Label identifier when installing with oem-config
+# mode active, regardless of what partman/mount_style was set to.
+if [ "$oem" = true ]; then
+    style="traditional"
+    db_set partman/mount_style $style
+fi
+
 fstab=$(
 	for i in /lib/partman/fstab.d/*; do
 		[ -x "$i" ] || continue

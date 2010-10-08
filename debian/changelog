@@ -1,3 +1,11 @@
+ubiquity (2.2.25jolicloud2) robby-lucid; urgency=low
+
+  * Create /etc/jolicloud-oem.conf immediately after the target filesystem
+    is primed, not last thing just before ubiquity exits. This ensures that
+    various d-i components that expect this file can find it.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Thu, 07 Oct 2010 22:50:29 -0600
+
 ubiquity (2.2.25jolicloud1) robby-lucid; urgency=low
 
   [ Benjamin Ryzman ]

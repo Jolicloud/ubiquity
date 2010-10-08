@@ -376,6 +376,7 @@ class Install:
                         sys.exit(3)
                     else:
                         raise
+            self.configure_oem_config()
 
             self.next_region()
             self.db.progress('INFO', 'ubiquity/install/network')
@@ -885,20 +886,6 @@ class Install:
             status_gz.close()
             status.close()
         except IOError:
-            pass
-        try:
-            if self.db.get('oem-config/enable') == 'true':
-                device_type = self.db.get('oem-config/device-type')
-                device_manufacturer = self.db.get('oem-config/device-manufacturer')
-                device_model = self.db.get('oem-config/device-model')
-                oem_file = open(
-                    os.path.join(self.target, 'etc/jolicloud-oem.conf'), 'w')
-                print >>oem_file, "[device]"
-                print >>oem_file, "type=%s" % device_type
-                print >>oem_file, "manufacturer=%s" % device_manufacturer
-                print >>oem_file, "model=%s" % device_model
-                oem_file.close()
-        except (debconf.DebconfError, IOError):
             pass
 
 
@@ -1541,6 +1528,22 @@ class Install:
                     else:
                         continue
                 os.symlink(linksrc, linkdst)
+
+    def configure_oem_config(self):
+        try:
+            if self.db.get('oem-config/enable') == 'true':
+                device_type = self.db.get('oem-config/device-type')
+                device_manufacturer = self.db.get('oem-config/device-manufacturer')
+                device_model = self.db.get('oem-config/device-model')
+                oem_file = open(
+                    os.path.join(self.target, 'etc/jolicloud-oem.conf'), 'w')
+                print >>oem_file, "[device]"
+                print >>oem_file, "type=%s" % device_type
+                print >>oem_file, "manufacturer=%s" % device_manufacturer
+                print >>oem_file, "model=%s" % device_model
+                oem_file.close()
+        except (debconf.DebconfError, IOError):
+            pass
 
     def configure_network(self):
         """Automatically configure the network.

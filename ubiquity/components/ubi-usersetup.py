@@ -266,7 +266,9 @@ class PageGtk(PageBase):
         return self.hostname.get_text()
 
     def set_hostname(self, value):
+        self.hostname.handler_block(self.hostname_changed_id)
         self.hostname.set_text(value)
+        self.hostname.handler_unblock(self.hostname_changed_id)
 
     def clear_errors(self):
         self.username_error_box.hide()

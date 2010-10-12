@@ -1,3 +1,10 @@
+ubiquity (2.2.25jolicloud3) robby-lucid; urgency=low
+
+  [ Jérémy Bethmont ]
+  * Fixed user-setup / hostname field with a default hostname.
+
+ -- Jérémy Bethmont <jerem@jolicloud.org>  Tue, 12 Oct 2010 18:43:42 +0200
+
 ubiquity (2.2.25jolicloud2) robby-lucid; urgency=low
 
   * Create /etc/jolicloud-oem.conf immediately after the target filesystem

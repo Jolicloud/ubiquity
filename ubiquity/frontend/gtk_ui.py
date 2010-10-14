@@ -957,6 +957,7 @@ class Wizard(BaseFrontend):
             self.progress_cancel_button.hide()
             if 'UBIQUITY_ONLY' in os.environ:
                 self.install_progress_window.set_decorated(False)
+            self.debconf_progress_window.show()
 
         else:
             self.debconf_progress_window = self.old_progress_window
@@ -1268,7 +1269,7 @@ class Wizard(BaseFrontend):
             '</b></big>')
         self.debconf_progress_set(0)
         self.progress_info.set_text('')
-        self.debconf_progress_window.show()
+        #self.debconf_progress_window.show()
 
     def debconf_progress_set (self, progress_val):
         if self.progress_cancelled:

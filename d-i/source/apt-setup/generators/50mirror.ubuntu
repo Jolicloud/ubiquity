@@ -244,6 +244,6 @@ ${COMMENT}deb-src http://archive.canonical.com/ubuntu $codename partner
 EOF
 fi
 
-apt-setup-signed-release archive.ubuntu.com "$file"
+#apt-setup-signed-release archive.ubuntu.com "$file"
 
 exit 0

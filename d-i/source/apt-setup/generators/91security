@@ -73,6 +73,6 @@ ${COMMENT}deb http://$host$directory $codename-security multiverse
 ${COMMENT}deb-src http://$host$directory $codename-security multiverse
 EOF
 
-apt-setup-signed-release security.ubuntu.com "$file"
+#apt-setup-signed-release security.ubuntu.com "$file"
 
 exit 0

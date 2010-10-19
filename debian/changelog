@@ -1,3 +1,15 @@
+ubiquity (2.2.25jolicloud4) robby-lucid; urgency=low
+
+  [ Benjamin Ryzman ]
+  * Never display the debconf window. They say its ugly
+
+  [ Adam McDaniel ]
+  * Updated apt-setup (1:0.43jolicloud2+l3)
+    - Disable apt-setup-signed-release to side-step volatile Ubuntu GPG
+      verifications.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Tue, 19 Oct 2010 15:30:05 -0600
+
 ubiquity (2.2.25jolicloud3) robby-lucid; urgency=low
 
   [ Jérémy Bethmont ]

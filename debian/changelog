@@ -1,3 +1,11 @@
+ubiquity (2.2.25jolicloud5) robby-lucid; urgency=low
+
+  * Updated apt-setup (1:0.43jolicloud3+l3)
+    - Replace ubuntu-{security,updates} APT sources with Jolicloud-buffed
+      mirrors
+
+ -- Adam McDaniel <adam@jolicloud.org>  Fri, 22 Oct 2010 14:27:14 -0600
+
 ubiquity (2.2.25jolicloud4) robby-lucid; urgency=low
 
   [ Benjamin Ryzman ]

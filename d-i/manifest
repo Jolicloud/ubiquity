@@ -1,4 +1,4 @@
-apt-setup 1:0.43jolicloud2+l3
+apt-setup 1:0.43jolicloud3+l3
 base-installer 1.104jolicloud1+l8
 bterm-unifont 1.1build1
 choose-mirror 2.29ubuntu3

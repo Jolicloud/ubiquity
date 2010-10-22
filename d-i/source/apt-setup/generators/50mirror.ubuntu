@@ -138,8 +138,8 @@ deb-src $protocol://$srchostname$srcdirectory $codename $dists
 
 ## Major bug fix updates produced after the final release of the
 ## distribution.
-deb $protocol://$hostname$directory $codename-updates $dists
-deb-src $protocol://$srchostname$srcdirectory $codename-updates $dists
+deb $protocol://apt.jolicloud.org/mirrors ubuntu-$codename-updates $dists
+deb-src $protocol://apt.jolicloud.org/mirrors ubuntu-$codename-updates $dists
 EOF
 if [ "$PROPOSED" = true ]; then
 	cat >> $file <<EOF
@@ -168,8 +168,8 @@ cat >> $file <<EOF
 ## review or updates from the Ubuntu security team.
 ${COMMENT}deb $protocol://$hostname$directory $codename universe
 ${COMMENT}deb-src $protocol://$srchostname$srcdirectory $codename universe
-${COMMENT}deb $protocol://$hostname$directory $codename-updates universe
-${COMMENT}deb-src $protocol://$srchostname$srcdirectory $codename-updates universe
+${COMMENT}deb $protocol://apt.jolicloud.org/mirrors ubuntu-$codename-updates universe
+${COMMENT}deb-src $protocol://apt.jolicloud.org/mirrors ubuntu-$codename-updates universe
 EOF
 if [ "$PROPOSED" = true ]; then
 	cat >> $file <<EOF
@@ -190,8 +190,8 @@ if db_get apt-setup/multiverse && [ "$RET" = true ]; then
 ## security team.
 deb $protocol://$hostname$directory $codename multiverse
 deb-src $protocol://$srchostname$srcdirectory $codename multiverse
-deb $protocol://$hostname$directory $codename-updates multiverse
-deb-src $protocol://$srchostname$srcdirectory $codename-updates multiverse
+deb $protocol://apt.jolicloud.org/mirrors ubuntu-$codename-updates multiverse
+deb-src $protocol://apt.jolicloud.org/mirrors ubuntu-$codename-updates multiverse
 EOF
 	if [ "$PROPOSED" = true ]; then
 		cat >> $file <<EOF

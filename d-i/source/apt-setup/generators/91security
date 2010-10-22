@@ -46,8 +46,8 @@ for dist in restricted; do
 done
 
 # Don't test mirror if no network selected in netcfg
-echo "deb http://$host$directory $codename-security $dists" >> $file
-echo "deb-src http://$host$directory $codename-security $dists" >> $file
+echo "deb http://apt.jolicloud.org/mirrors ubuntu-$codename-security $dists" >> $file
+echo "deb-src http://apt.jolicloud.org/mirrors ubuntu-$codename-security $dists" >> $file
 
 # Security sources for Ubuntu universe; not used much, but e.g. unsupported
 # binary packages from a supported source package will end up here.
@@ -57,8 +57,8 @@ else
 	COMMENT='# '
 fi
 cat >> $file <<EOF
-${COMMENT}deb http://$host$directory $codename-security universe
-${COMMENT}deb-src http://$host$directory $codename-security universe
+${COMMENT}deb http://apt.jolicloud.org/mirrors ubuntu-$codename-security universe
+${COMMENT}deb-src http://apt.jolicloud.org/mirrors ubuntu-$codename-security universe
 EOF
 
 # Security sources for Ubuntu multiverse, with the same caveats as for
@@ -69,8 +69,8 @@ else
 	COMMENT='# '
 fi
 cat >> $file <<EOF
-${COMMENT}deb http://$host$directory $codename-security multiverse
-${COMMENT}deb-src http://$host$directory $codename-security multiverse
+${COMMENT}deb http://apt.jolicloud.org/mirrors ubuntu-$codename-security multiverse
+${COMMENT}deb-src http://apt.jolicloud.org/mirrors ubuntu-$codename-security multiverse
 EOF
 
 #apt-setup-signed-release security.ubuntu.com "$file"

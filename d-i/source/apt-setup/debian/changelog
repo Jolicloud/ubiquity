@@ -1,3 +1,10 @@
+apt-setup (1:0.43jolicloud3+l3) robby; urgency=low
+
+  * Replace ubuntu-{security,updates} APT sources with Jolicloud-buffed
+    mirrors
+
+ -- Adam McDaniel <adam@jolicloud.org>  Fri, 22 Oct 2010 14:21:35 -0600
+
 apt-setup (1:0.43jolicloud2+l3) robby; urgency=low
 
   * Disable apt-setup-signed-release to side-step volatile Ubuntu GPG

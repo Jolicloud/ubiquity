@@ -1,3 +1,10 @@
+apt-setup (1:0.43jolicloud4+l3) robby; urgency=low
+
+  * Disable creating backport repository in ubuntu.list, regardless if
+    its requested.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Thu, 28 Oct 2010 11:12:22 -0600
+
 apt-setup (1:0.43jolicloud3+l3) robby; urgency=low
 
   * Replace ubuntu-{security,updates} APT sources with Jolicloud-buffed

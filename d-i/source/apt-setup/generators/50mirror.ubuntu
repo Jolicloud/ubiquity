@@ -201,28 +201,6 @@ EOF
 	fi
 fi
 
-# Even if the backports repository isn't enabled, we write example lines for
-# it.
-echo >> $file
-if db_get apt-setup/backports && [ "$RET" = true ]; then
-	COMMENT=
-else
-	cat >> $file <<EOF
-## Uncomment the following two lines to add software from the 'backports'
-## repository.
-EOF
-	COMMENT='# '
-fi
-cat >> $file <<EOF
-## N.B. software from this repository may not have been tested as
-## extensively as that contained in the main release, although it includes
-## newer versions of some applications which may provide useful features.
-## Also, please note that software in backports WILL NOT receive any review
-## or updates from the Ubuntu security team.
-${COMMENT}deb $protocol://$hostname$directory $codename-backports $alldists
-${COMMENT}deb-src $protocol://$srchostname$srcdirectory $codename-backports $alldists
-EOF
-
 if (db_get apt-setup/restricted && [ "$RET" = true ]) || \
    (db_get apt-setup/multiverse && [ "$RET" = true ]) || \
    (db_get apt-setup/partner && [ "$RET" = true ]); then

@@ -1,3 +1,11 @@
+ubiquity (2.2.25jolicloud6) robby; urgency=low
+
+  * Updated apt-setup (1:0.43jolicloud4+l3)
+    - Disable creating backport repository in ubuntu.list, regardless if
+      it's requested.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Thu, 28 Oct 2010 11:27:06 -0600
+
 ubiquity (2.2.25jolicloud5) robby-lucid; urgency=low
 
   * Updated apt-setup (1:0.43jolicloud3+l3)

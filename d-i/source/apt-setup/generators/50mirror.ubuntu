@@ -138,15 +138,23 @@ deb-src $protocol://$srchostname$srcdirectory $codename $dists
 
 ## Major bug fix updates produced after the final release of the
 ## distribution.
-deb $protocol://apt.jolicloud.org/mirrors ubuntu-$codename-updates $dists
-deb-src $protocol://apt.jolicloud.org/mirrors ubuntu-$codename-updates $dists
+
+# (Jolicloud) Note that "$codename-updates $dists" is provided
+# by /etc/apt/sources.list.d/jolicloud-mirrors.list as a buffered feed of
+# Jolicloud-tested $codename-updates.
+#deb $protocol://$hostname$directory $codename-updates $dists
+#deb-src $protocol://$hostname$directory $codename-updates $dists
 EOF
 if [ "$PROPOSED" = true ]; then
 	cat >> $file <<EOF
 
 ## Proposed updates undergoing testing.
-deb $protocol://$hostname$directory $codename-proposed $dists
-deb-src $protocol://$srchostname$srcdirectory $codename-proposed $dists
+
+# (Jolicloud) Note that "$codename-proposed $dists" is provided
+# by /etc/apt/sources.list.d/jolicloud-mirrors.list as a buffered feed of
+# Jolicloud-tested $codename-proposed.
+#deb $protocol://$hostname$directory $codename-proposed $dists
+#deb-src $protocol://$srchostname$srcdirectory $codename-proposed $dists
 EOF
 fi
 
@@ -168,13 +176,17 @@ cat >> $file <<EOF
 ## review or updates from the Ubuntu security team.
 ${COMMENT}deb $protocol://$hostname$directory $codename universe
 ${COMMENT}deb-src $protocol://$srchostname$srcdirectory $codename universe
-${COMMENT}deb $protocol://apt.jolicloud.org/mirrors ubuntu-$codename-updates universe
-${COMMENT}deb-src $protocol://apt.jolicloud.org/mirrors ubuntu-$codename-updates universe
+
+# (Jolicloud) Note that "$codename-updates universe" is provided
+# by /etc/apt/sources.list.d/jolicloud-mirrors.list as a buffered feed of
+# Jolicloud-tested $codename-updates.
+#deb $protocol://$hostname$directory $codename-updates universe
+#deb-src $protocol://$hostname$directory $codename-updates universe
 EOF
 if [ "$PROPOSED" = true ]; then
 	cat >> $file <<EOF
-${COMMENT}deb $protocol://$hostname$directory $codename-proposed universe
-${COMMENT}deb-src $protocol://$srchostname$srcdirectory $codename-proposed universe
+#deb $protocol://$hostname$directory $codename-proposed universe
+#deb-src $protocol://$srchostname$srcdirectory $codename-proposed universe
 EOF
 fi
 
@@ -190,8 +202,12 @@ if db_get apt-setup/multiverse && [ "$RET" = true ]; then
 ## security team.
 deb $protocol://$hostname$directory $codename multiverse
 deb-src $protocol://$srchostname$srcdirectory $codename multiverse
-deb $protocol://apt.jolicloud.org/mirrors ubuntu-$codename-updates multiverse
-deb-src $protocol://apt.jolicloud.org/mirrors ubuntu-$codename-updates multiverse
+
+# (Jolicloud) Note that "$codename-updates multiverse" is provided
+# by /etc/apt/sources.list.d/jolicloud-mirrors.list as a buffered feed of
+# Jolicloud-tested $codename-updates.
+#deb $protocol://$hostname$directory $codename-updates multiverse
+#deb-src $protocol://$hostname$directory $codename-updates multiverse
 EOF
 	if [ "$PROPOSED" = true ]; then
 		cat >> $file <<EOF

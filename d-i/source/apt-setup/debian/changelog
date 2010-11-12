@@ -1,7 +1,14 @@
+apt-setup (1:0.43jolicloud5+l3) robby; urgency=low
+
+  * Disable the direct URL to the Jolicloud ubuntu-{security,updates}
+    mirrors and restore the original URL, but leave it commented out.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Fri, 12 Nov 2010 15:30:06 +0100
+
 apt-setup (1:0.43jolicloud4+l3) robby; urgency=low
 
   * Disable creating backport repository in ubuntu.list, regardless if
-    its requested.
+    it's requested.
 
  -- Adam McDaniel <adam@jolicloud.org>  Thu, 28 Oct 2010 11:12:22 -0600
 

@@ -46,8 +46,13 @@ for dist in restricted; do
 done
 
 # Don't test mirror if no network selected in netcfg
-echo "deb http://apt.jolicloud.org/mirrors ubuntu-$codename-security $dists" >> $file
-echo "deb-src http://apt.jolicloud.org/mirrors ubuntu-$codename-security $dists" >> $file
+cat >> $file <<EOF
+# (Jolicloud) Note that "$codename-security *" is provided
+# by /etc/apt/sources.list.d/jolicloud-mirrors.list as a buffered feed of
+# Jolicloud-tested $codename-security.
+EOF
+echo "#deb http://$host$directory $codename-security $dists" >> $file
+echo "#deb-src http://$host$directory $codename-security $dists" >> $file
 
 # Security sources for Ubuntu universe; not used much, but e.g. unsupported
 # binary packages from a supported source package will end up here.
@@ -57,8 +62,8 @@ else
 	COMMENT='# '
 fi
 cat >> $file <<EOF
-${COMMENT}deb http://apt.jolicloud.org/mirrors ubuntu-$codename-security universe
-${COMMENT}deb-src http://apt.jolicloud.org/mirrors ubuntu-$codename-security universe
+#deb http://$host$directory $codename-security universe
+#deb-src http://$host$directory $codename-security universe
 EOF
 
 # Security sources for Ubuntu multiverse, with the same caveats as for
@@ -69,8 +74,8 @@ else
 	COMMENT='# '
 fi
 cat >> $file <<EOF
-${COMMENT}deb http://apt.jolicloud.org/mirrors ubuntu-$codename-security multiverse
-${COMMENT}deb-src http://apt.jolicloud.org/mirrors ubuntu-$codename-security multiverse
+#deb http://$host$directory $codename-security multiverse
+#deb-src http://$host$directory $codename-security multiverse
 EOF
 
 #apt-setup-signed-release security.ubuntu.com "$file"

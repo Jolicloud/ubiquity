@@ -10,7 +10,7 @@ author		"Ubuntu Installer Team <ubuntu-installer@lists.ubuntu.com>"
 start on (starting gdm
 	  or starting kdm
 	  or starting xdm
-	  or starting slim 
+	  or starting slim
 	  or starting uxlaunch)
 stop on runlevel [06]
 
@@ -66,20 +66,19 @@ script
     # turn off console blanking for install process
     setterm -blank 0
 
+    plymouth quit || :
     if [ -n "$noninteractive" ]; then
-	plymouth quit || :
 	exec ubiquity noninteractive $debug
     else
 	if ! ubiquity-dm vt1 :0 ubuntu /usr/bin/ubiquity $debug $automatic $choose --only; then
 	    # has X crashed, or has ubiquity?
             if [ "$automatic" ] && ! [ -f /var/log/installer/version ]; then
                 # in case we crashed before the X startup sequence
-                plymouth quit || :
                 exec ubiquity noninteractive $debug
             fi
 	fi
     fi
-    plymouthd --mode=shutdown || :
+    chvt 7     # Force plymouth's VT7
     plymouth show-splash || :
 
     exit 0

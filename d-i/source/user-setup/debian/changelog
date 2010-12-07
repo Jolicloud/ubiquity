@@ -1,3 +1,10 @@
+user-setup (1.29jolicloud2+l7) robby; urgency=low
+
+  * Ensure '#includedir' appears after "%admin ALL=(ALL) ALL" in
+    /etc/sudoers
+
+ -- Adam McDaniel <adam@jolicloud.org>  Tue, 07 Dec 2010 04:50:55 -0700
+
 user-setup (1.29jolicloud1+l7) robby; urgency=low
 
   * Added SLiM support into the user-auto-login setup procedure

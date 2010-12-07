@@ -1,3 +1,19 @@
+ubiquity (2.2.25jolicloud7~2) robby; urgency=low
+
+  * Updated user-setup (1.29jolicloud2+l7)
+    - Ensure '#includedir' appears after "%admin ALL=(ALL) ALL" in /etc/sudoers
+
+ -- Adam McDaniel <adam@jolicloud.org>  Tue, 07 Dec 2010 04:54:14 -0700
+
+ubiquity (2.2.25jolicloud7~1) robby; urgency=low
+
+  * Updated apt-setup (1:0.43jolicloud5+l3)
+    - Disable the direct URL to the Jolicloud ubuntu-{security,updates}
+      mirrors and restore the original URL, but leave it commented out.
+  * Switch to vt7 when ubiquity finished, then start plymouth back up.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Fri, 12 Nov 2010 19:26:33 +0100
+
 ubiquity (2.2.25jolicloud6) robby; urgency=low
 
   * Updated apt-setup (1:0.43jolicloud4+l3)

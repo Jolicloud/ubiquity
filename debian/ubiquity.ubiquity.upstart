@@ -11,6 +11,7 @@ start on (starting gdm
 	  or starting kdm
 	  or starting xdm
 	  or starting slim
+	  or starting jolicloud-displaymanager
 	  or starting uxlaunch)
 stop on runlevel [06]
 

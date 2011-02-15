@@ -78,8 +78,11 @@ script
             fi
 	fi
     fi
-    chvt 7     # Force plymouth's VT7
-    plymouth show-splash || :
 
     exit 0
+end script
+
+post-stop script
+    chvt 7     # Force plymouth's VT7
+    plymouth show-splash || :
 end script

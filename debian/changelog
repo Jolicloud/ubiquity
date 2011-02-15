@@ -1,3 +1,12 @@
+ubiquity (2.2.25jolicloud7) robby-1.1.1; urgency=low
+
+  * Use ubiquity's post-stop script to restart plymouth during system
+    shutdown. This method is more reliable to bring back up plymouth,
+    avoiding an annoying race condition where plymouth would start but the
+    VT wouldn't change.
+
+ -- Adam McDaniel <adam@jolicloud.org>  Mon, 14 Feb 2011 22:22:30 -0700
+
 ubiquity (2.2.25jolicloud7~2) robby; urgency=low
 
   * Updated user-setup (1.29jolicloud2+l7)

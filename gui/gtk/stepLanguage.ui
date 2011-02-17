@@ -70,7 +70,7 @@
                     <property name="can_focus">True</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
-                    <property name="label" translatable="yes">You can try Jolicloud from this CD without making any changes to your system.</property>
+                    <property name="label" translatable="yes">You can try Joli OS from this CD without making any changes to your system.</property>
                     <property name="wrap">True</property>
                   </object>
                   <packing>
@@ -86,7 +86,7 @@
                     <property name="xscale">0</property>
                     <child>
                       <object class="GtkButton" id="try_ubuntu">
-                        <property name="label" translatable="yes">Try Jolicloud</property>
+                        <property name="label" translatable="yes">Try Joli OS</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -178,7 +178,7 @@ The installation process may resize or erase partitions on your hard disk. Be su
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes">You are installing in system manufacturer (OEM) mode. Please enter the specific details for this batch of systems. This information will be saved on the installed system and be accessable by the Jolicloud daemon.</property>
+                            <property name="label" translatable="yes">You are installing in system manufacturer (OEM) mode. Please enter the specific details for this batch of systems. This information will be saved on the installed system.</property>
                             <property name="wrap">True</property>
                           </object>
                           <packing>
@@ -300,7 +300,7 @@ The installation process may resize or erase partitions on your hard disk. Be su
                     <property name="xscale">0</property>
                     <child>
                       <object class="GtkButton" id="install_ubuntu">
-                        <property name="label" translatable="yes">Install Jolicloud</property>
+                        <property name="label" translatable="yes">Install Joli OS</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

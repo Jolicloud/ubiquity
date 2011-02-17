@@ -1294,9 +1294,9 @@ class Wizard(BaseFrontend):
             return False
         self.progress_info.set_justify(gtk.JUSTIFY_CENTER)
         if self.oem_user_config:
-            self.progress_info.set_markup('<span color="white"><b>Configuring Jolicloud</b></span>')
+            self.progress_info.set_markup('<span color="white"><b>Configuring Joli OS</b></span>')
         else:
-            self.progress_info.set_markup('<span color="white"><b>Installing Jolicloud</b></span>')
+            self.progress_info.set_markup('<span color="white"><b>Installing Joli OS</b></span>')
         return True
 
     def debconf_progress_stop (self):

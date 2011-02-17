@@ -595,7 +595,7 @@ _Description: Port:
 Template: ubiquity/text/finished_label
 Type: text
 _Description:
- Installation has finished.  You can continue testing Jolicloud now, but until
+ Installation has finished.  You can continue testing Joli OS now, but until
  you restart the computer, any changes you make or documents you save will
  not be preserved.
 
@@ -1011,7 +1011,7 @@ _Description: Do you want to return to the partitioner?
 
 Template: ubiquity/text/oem_user_config_title
 Type: text
-_Description: Jolicloud Configuration
+_Description: Joli OS Configuration
 
 Template: ubiquity/text/language_heading_label
 Type: text

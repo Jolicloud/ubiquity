@@ -1,3 +1,9 @@
+ubiquity (2.2.25jolicloud8) robby-1.2; urgency=low
+
+  * Rename "Jolicloud" to "Joli" OS in UI
+
+ -- Benjamin Ryzman <benjamin@jolicloud.org>  Thu, 17 Feb 2011 11:42:35 +0100
+
 ubiquity (2.2.25jolicloud7) robby-1.1.1; urgency=low
 
   * Use ubiquity's post-stop script to restart plymouth during system
@@ -6,6 +12,13 @@ ubiquity (2.2.25jolicloud7) robby-1.1.1; urgency=low
     VT wouldn't change.
 
  -- Adam McDaniel <adam@jolicloud.org>  Mon, 14 Feb 2011 22:22:30 -0700
+
+ubiquity (2.2.25jolicloud7~3) robby; urgency=low
+
+  [ Jérémy Bethmont ]
+  * Added jolicloud-displaymanager support
+
+ -- Jérémy Bethmont <jerem@jolicloud.org>  Wed, 09 Feb 2011 11:23:27 +0100
 
 ubiquity (2.2.25jolicloud7~2) robby; urgency=low
 

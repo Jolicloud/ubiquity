@@ -45,7 +45,7 @@ def disable_autologin():
     import traceback
 
     # Reverse actions of user-setup-apply.
-    for name in ('/etc/gdm/custom.conf', '/etc/kde4/kdm/kdmrc', '/etc/slim.conf'):
+    for name in ('/etc/gdm/custom.conf', '/etc/kde4/kdm/kdmrc', '/etc/slim.conf', '/etc/jolicloud-dislaymanager/99ubiquity'):
         if os.path.exists('%s.oem' % name):
             try:
                 os.rename('%s.oem' % name, name)

@@ -306,6 +306,8 @@ def get_release_name():
             line = fp.readline()
             if line:
                 line = line.split()
+                if line[1] == 'OS':
+                    line[0] += ' ' + line.pop(1)
                 if line[2] == 'LTS':
                     get_release_name.release_name = ' '.join(line[:3])
                 else:

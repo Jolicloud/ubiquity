@@ -1,3 +1,16 @@
+ubiquity (2.2.25jolicloud9) robby; urgency=low
+
+  [ Adam McDaniel ]
+  * When identifying the release name from /cdrom/.disk/info, if the
+    second word has "OS", concatinate it with the first word, like
+    "Jolicloud". This way, ubiquity can continue to treat the new second
+    word as the version number.
+
+  [ Jérémy Bethmont ]
+  * Fixed Jolicloud Display Manager support.
+
+ -- Jérémy Bethmont <jerem@jolicloud.org>  Tue, 22 Feb 2011 14:20:17 +0100
+
 ubiquity (2.2.25jolicloud8) robby-1.2; urgency=low
 
   * Rename "Jolicloud" to "Joli" OS in UI

@@ -284,7 +284,7 @@ TimedLoginDelay=10"
 					/etc/slim.conf
 			fi
 			
-			if $chroot $ROOT [ -f /etc/jolicloud-displaymanager/99ubiquity ]; then
+			if $chroot $ROOT [ -d /etc/jolicloud-displaymanager ]; then
 				# Configure Jolicloud Display Manager autologin
 				$log $chroot $ROOT cat << EOF > /etc/jolicloud-displaymanager/99ubiquity
 [autologin]
